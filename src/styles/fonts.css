@@ -1,0 +1,164 @@
+/* Open Sauce One - Regular */
+@font-face {
+  font-family: 'Open Sauce One';
+  src: url('/fonts/OpenSauce/OpenSauceOne-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Open Sauce One - Medium as separate family */
+@font-face {
+  font-family: 'OpenSauceOne-Medium';
+  src: url('/fonts/OpenSauceOne/OpenSauceOne-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Open Sauce One - SemiBold as separate family */
+@font-face {
+  font-family: 'OpenSauceOne-SemiBold';
+  src: url('/fonts/OpenSauceOne/OpenSauceOne-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Open Sauce One - Bold as separate family */
+@font-face {
+  font-family: 'OpenSauceOne-Bold';
+  src: url('/fonts/OpenSauceOne/OpenSauceOne-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Open Sauce One - All weights under single family name for fallback */
+@font-face {
+  font-family: 'Open Sauce One';
+  src: url('/fonts/OpenSauceOne/OpenSauceOne-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Open Sauce One';
+  src: url('/fonts/OpenSauceOne/OpenSauceOne-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Open Sauce One';
+  src: url('/fonts/OpenSauceOne/OpenSauceOne-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* BIZ UDPMincho */
+/* @font-face {
+    font-family: 'BIZ UDPMincho';
+    src: url('/fonts/BIZUDPMincho/BIZUDPMincho-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  } */
+@font-face {
+  font-family: 'BIZ UDPMincho';
+  src: url('/fonts/BIZUDPMincho/BIZUDPMincho-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Inter - Regular */
+@font-face {
+  font-family: 'Inter';
+  src: url('/fonts/Inter/Inter-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Inter - Medium as separate family */
+@font-face {
+  font-family: 'Inter-Medium';
+  src: url('/fonts/Inter/Inter-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Inter - SemiBold as separate family */
+@font-face {
+  font-family: 'Inter-SemiBold';
+  src: url('/fonts/Inter/Inter-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Inter - Bold as separate family */
+@font-face {
+  font-family: 'Inter-Bold';
+  src: url('/fonts/Inter/Inter-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Inter - All weights under single family name for fallback */
+@font-face {
+  font-family: 'Inter';
+  src: url('/fonts/Inter/Inter-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Inter';
+  src: url('/fonts/Inter/Inter-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Inter';
+  src: url('/fonts/Inter/Inter-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Besley';
+  src: url('/fonts/Besley/Besley-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Besley-Medium';
+  src: url('/fonts/Besley/Besley-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Besley-SemiBold';
+  src: url('/fonts/Besley/Besley-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Besley-Bold';
+  src: url('/fonts/Besley/Besley-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}

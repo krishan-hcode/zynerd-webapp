@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+    <meta http-equiv="origin-trial" content="" />
+    <title>Conference Webinar</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        touch-action: manipulation;
+      }
+      html {
+        touch-action: manipulation;
+      }
+      /* Hide Zoom branding logo in mobile/responsive view (disableZoomLogo only applies to desktop layout) */
+      @media (max-width: 768px) {
+        #zmmtg-root [class*="footer"] [class*="logo"],
+        #zmmtg-root [class*="Logo"],
+        #zmmtg-root [class*="brand"],
+        #zmmtg-root [class*="zoom-logo"],
+        #zmmtg-root a[class*="logo"],
+        #zmmtg-root .zm-footer-bar-left > div:first-child {
+          display: none !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="zmmtg-root"></div>
+
+    <script src="https://source.zoom.us/5.1.2/lib/vendor/react.min.js"></script>
+    <script src="https://source.zoom.us/5.1.2/lib/vendor/react-dom.min.js"></script>
+    <script src="https://source.zoom.us/5.1.2/lib/vendor/redux.min.js"></script>
+    <script src="https://source.zoom.us/5.1.2/lib/vendor/redux-thunk.min.js"></script>
+    <script src="https://source.zoom.us/5.1.2/zoom-meeting-5.1.2.min.js"></script>
+    <script>
+      function postToParent(data) {
+        window.parent.postMessage(JSON.stringify(data), '*');
+      }
+
+      // If redirected here after leaving, notify parent and stop
+      if (window.location.search.indexOf('left=true') !== -1) {
+        postToParent({ type: 'ZOOM_LEFT' });
+        // Don't initialize SDK — parent will reload iframe without ?left=true
+      } else if (typeof ZoomMtg !== 'undefined') {
+        postToParent({ type: 'ZOOM_SDK_READY' });
+      } else {
+        postToParent({
+          type: 'ZOOM_ERROR',
+          error: { reason: 'SDK scripts failed to load' },
+        });
+      }
+
+      window.addEventListener('message', function (event) {
+        try {
+          var config = JSON.parse(event.data);
+          if (config.action === 'join') joinWebinar(config);
+          if (config.action === 'leave') leaveWebinar();
+        } catch (e) {
+          // Ignore non-JSON messages
+        }
+      });
+
+      function hideZoomBrandInMobile() {
+        function run() {
+          if (window.innerWidth > 768) return;
+          var root = document.getElementById('zmmtg-root');
+          if (!root) return;
+          var all = root.getElementsByTagName('*');
+          for (var i = 0; i < all.length; i++) {
+            var el = all[i];
+            var text = (el.textContent || '').trim();
+            if (text !== 'Zoom') continue;
+            var parent = el.parentElement;
+            while (parent && parent !== root) {
+              if (parent.querySelector('svg') && (parent.textContent || '').indexOf('Zoom') !== -1) {
+                parent.style.setProperty('display', 'none', 'important');
+                break;
+              }
+              parent = parent.parentElement;
+            }
+          }
+        }
+        setTimeout(run, 1500);
+        setTimeout(run, 4000);
+        window.addEventListener('resize', run);
+      }
+
+      function joinWebinar(config) {
+        ZoomMtg.preLoadWasm();
+        ZoomMtg.prepareWebSDK();
+
+        ZoomMtg.init({
+          leaveUrl: '/conference-meeting.html?left=true',
+          patchJsMedia: true,
+          meetingInfo: [],
+          disableZoomLogo: true,
+          disablePreview: true,
+          success: function () {
+            postToParent({ type: 'ZOOM_INIT_SUCCESS' });
+
+            ZoomMtg.join({
+              signature: config.signature,
+              meetingNumber: config.webinarNumber,
+              passWord: config.password,
+              userName: config.userName,
+              userEmail: config.userEmail,
+              tk: config.tk,
+              success: function () {
+                postToParent({ type: 'ZOOM_JOINED' });
+                hideZoomBrandInMobile();
+              },
+              error: function (err) {
+                postToParent({ type: 'ZOOM_ERROR', error: err });
+              },
+            });
+          },
+          error: function (err) {
+            postToParent({ type: 'ZOOM_ERROR', error: err });
+          },
+        });
+      }
+
+      function leaveWebinar() {
+        ZoomMtg.leaveMeeting({
+          success: function () {
+            postToParent({ type: 'ZOOM_LEFT' });
+          },
+        });
+      }
+    </script>
+  </body>
+</html>
