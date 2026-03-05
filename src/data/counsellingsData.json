@@ -1,0 +1,297 @@
+{
+  "ALL_COUNSELLINGS": [
+    {
+      "id": 1,
+      "name": "All India UG – Medical & Dental",
+      "subtitle": "All India",
+      "slug": "all-india-ug-medical-dental"
+    },
+    {
+      "id": 2,
+      "name": "AFMS (through MCC) – UG Medical",
+      "subtitle": "AFMS",
+      "slug": "afms-ug-medical"
+    },
+    {
+      "id": 3,
+      "name": "Andaman & Nicobar Islands – UG Medical",
+      "subtitle": "Government Quota",
+      "slug": "andaman-nicobar-ug-medical"
+    },
+    {
+      "id": 4,
+      "name": "Andhra Pradesh Government Quota – UG Medical",
+      "subtitle": "Government Quota",
+      "slug": "andhra-pradesh-govt-ug-medical"
+    },
+    {
+      "id": 5,
+      "name": "Andhra Pradesh Management Quota – UG Medical",
+      "subtitle": "Management Quota",
+      "slug": "andhra-pradesh-mgmt-ug-medical"
+    },
+    {
+      "id": 6,
+      "name": "Arunachal Pradesh – UG Medical",
+      "subtitle": "Government Quota",
+      "slug": "arunachal-pradesh-ug-medical"
+    },
+    {
+      "id": 7,
+      "name": "Assam – UG Medical",
+      "subtitle": "Government Quota",
+      "slug": "assam-ug-medical"
+    },
+    {
+      "id": 8,
+      "name": "Bihar – UG Medical",
+      "subtitle": "Government Quota",
+      "slug": "bihar-ug-medical"
+    },
+    {
+      "id": 9,
+      "name": "Chandigarh – UG Medical",
+      "subtitle": "Government Quota",
+      "slug": "chandigarh-ug-medical"
+    },
+    {
+      "id": 10,
+      "name": "Chhattisgarh – UG Medical",
+      "subtitle": "Government Quota and Management Quota",
+      "slug": "chhattisgarh-ug-medical"
+    },
+    {
+      "id": 11,
+      "name": "Dadra and Nagar Haveli – UG Medical",
+      "subtitle": "Government Quota and Management Quota",
+      "slug": "dadra-nagar-haveli-ug-medical"
+    },
+    {
+      "id": 12,
+      "name": "Delhi – UG Medical",
+      "subtitle": "Government Quota",
+      "slug": "delhi-ug-medical"
+    },
+    {
+      "id": 13,
+      "name": "Goa – UG Medical",
+      "subtitle": "Government Quota",
+      "slug": "goa-ug-medical"
+    },
+    {
+      "id": 14,
+      "name": "Gujarat – UG Medical",
+      "subtitle": "Government Quota",
+      "slug": "gujarat-ug-medical"
+    },
+    {
+      "id": 15,
+      "name": "Haryana – UG Medical",
+      "subtitle": "Government Quota and Management Quota",
+      "slug": "haryana-ug-medical"
+    },
+    {
+      "id": 16,
+      "name": "Himachal Pradesh – UG Medical",
+      "subtitle": "Government Quota and Management Quota",
+      "slug": "himachal-pradesh-ug-medical"
+    },
+    {
+      "id": 17,
+      "name": "Jammu and Kashmir – UG Medical",
+      "subtitle": "Government Quota and Management Quota",
+      "slug": "jammu-kashmir-ug-medical"
+    },
+    {
+      "id": 18,
+      "name": "Jharkhand – UG Medical",
+      "subtitle": "Government Quota and Management Quota",
+      "slug": "jharkhand-ug-medical"
+    },
+    {
+      "id": 19,
+      "name": "Karnataka – UG Medical",
+      "subtitle": "Government Quota",
+      "slug": "karnataka-ug-medical"
+    },
+    {
+      "id": 20,
+      "name": "Kerala – UG Medical",
+      "subtitle": "Government Quota and Management Quota",
+      "slug": "kerala-ug-medical"
+    },
+    {
+      "id": 21,
+      "name": "Madhya Pradesh – UG Medical",
+      "subtitle": "Government Quota and Management Quota",
+      "slug": "madhya-pradesh-ug-medical"
+    },
+    {
+      "id": 22,
+      "name": "Maharashtra – UG Medical",
+      "subtitle": "Government Quota and Management Quota",
+      "slug": "maharashtra-ug-medical"
+    },
+    {
+      "id": 23,
+      "name": "Manipur – UG Medical",
+      "subtitle": "Government Quota",
+      "slug": "manipur-ug-medical"
+    },
+    {
+      "id": 24,
+      "name": "Meghalaya – UG Medical",
+      "subtitle": "Government Quota",
+      "slug": "meghalaya-ug-medical"
+    },
+    {
+      "id": 25,
+      "name": "Mizoram – UG Medical",
+      "subtitle": "Government Quota",
+      "slug": "mizoram-ug-medical"
+    },
+    {
+      "id": 26,
+      "name": "Nagaland – UG Medical",
+      "subtitle": "Government Quota",
+      "slug": "nagaland-ug-medical"
+    },
+    {
+      "id": 27,
+      "name": "NEIGRIHMS – UG Medical",
+      "subtitle": "Government Quota",
+      "slug": "neigrihms-ug-medical"
+    },
+    {
+      "id": 28,
+      "name": "Odisha – UG Medical",
+      "subtitle": "Government Quota and Management Quota",
+      "slug": "odisha-ug-medical"
+    },
+    {
+      "id": 29,
+      "name": "Open Seats (Private Institute seats available)",
+      "subtitle": "Open State Seats",
+      "slug": "open-seats-private-institutes"
+    },
+    {
+      "id": 30,
+      "name": "Pondicherry – UG Medical",
+      "subtitle": "Government Quota and Management Quota",
+      "slug": "pondicherry-ug-medical"
+    },
+    {
+      "id": 31,
+      "name": "Punjab – UG Medical",
+      "subtitle": "Government Quota",
+      "slug": "punjab-ug-medical"
+    },
+    {
+      "id": 32,
+      "name": "Rajasthan – UG Medical",
+      "subtitle": "Government Quota",
+      "slug": "rajasthan-ug-medical"
+    },
+    {
+      "id": 33,
+      "name": "RIMS Manipur – UG Medical",
+      "subtitle": "Government Quota",
+      "slug": "rims-manipur-ug-medical"
+    },
+    {
+      "id": 34,
+      "name": "Sikkim Manipal University – UG Medical",
+      "subtitle": "Government Quota and Management Quota",
+      "slug": "sikkim-manipal-ug-medical"
+    },
+    {
+      "id": 35,
+      "name": "Sikkim – UG Medical",
+      "subtitle": "Government Quota",
+      "slug": "sikkim-ug-medical"
+    },
+    {
+      "id": 36,
+      "name": "Tamil Nadu Government Quota – UG Medical",
+      "subtitle": "Government Quota",
+      "slug": "tamil-nadu-govt-ug-medical"
+    },
+    {
+      "id": 37,
+      "name": "Tamil Nadu Management Quota – UG Medical",
+      "subtitle": "Management Quota",
+      "slug": "tamil-nadu-mgmt-ug-medical"
+    },
+    {
+      "id": 38,
+      "name": "Telangana Government Quota – UG Medical",
+      "subtitle": "Government Quota",
+      "slug": "telangana-govt-ug-medical"
+    },
+    {
+      "id": 39,
+      "name": "Telangana Management Quota – UG Medical",
+      "subtitle": "Management Quota",
+      "slug": "telangana-mgmt-ug-medical"
+    },
+    {
+      "id": 40,
+      "name": "Tripura – UG Medical",
+      "subtitle": "Government Quota",
+      "slug": "tripura-ug-medical"
+    },
+    {
+      "id": 41,
+      "name": "Uttar Pradesh – UG Medical",
+      "subtitle": "Government Quota and Management Quota",
+      "slug": "uttar-pradesh-ug-medical"
+    },
+    {
+      "id": 42,
+      "name": "Uttarakhand – UG Medical",
+      "subtitle": "Government Quota and Management Quota",
+      "slug": "uttarakhand-ug-medical"
+    },
+    {
+      "id": 43,
+      "name": "West Bengal – UG Medical",
+      "subtitle": "GoverØnment Quota and Management Quota",
+      "slug": "west-bengal-ug-medical"
+    }
+  ],
+  "TYPE_OPTIONS": ["Government Quota", "Management Quota"],
+  "STATE_OPTIONS": [
+    "All India",
+    "Andhra Pradesh",
+    "Arunachal Pradesh",
+    "Assam",
+    "Bihar",
+    "Chandigarh",
+    "Chhattisgarh",
+    "Delhi",
+    "Goa",
+    "Gujarat",
+    "Haryana",
+    "Himachal Pradesh",
+    "Jharkhand",
+    "Karnataka",
+    "Kerala",
+    "Madhya Pradesh",
+    "Maharashtra",
+    "Manipur",
+    "Meghalaya",
+    "Mizoram",
+    "Nagaland",
+    "Odisha",
+    "Pondicherry",
+    "Punjab",
+    "Rajasthan",
+    "Sikkim",
+    "Tamil Nadu",
+    "Telangana",
+    "Tripura",
+    "Uttar Pradesh",
+    "Uttarakhand",
+    "West Bengal"
+  ]
+}
