@@ -1,0 +1,137 @@
+{
+  "tags": [
+    "certificates",
+    "registration",
+    "application",
+    "tamilnadu",
+    "closingranks",
+    "Reservation",
+    "nri",
+    "Documents",
+    "Malayalam",
+    "Live",
+    "choicefilling",
+    "Seats",
+    "openseats",
+    "govtseats",
+    "privateseats",
+    "deemedseats",
+    "allindiaquota",
+    "allindia",
+    "westbengal"
+  ],
+  "counsellingOptions": [
+    "All India Counselling",
+    "State Counselling",
+    "KEAM Counselling",
+    "Punjab State Quota",
+    "Haryana State Quota"
+  ],
+  "languages": ["All languages", "English", "தமிழ்", "മലയാളം", "Hindi"],
+  "sections": [
+    {
+      "id": "latest",
+      "title": "Latest",
+      "viewMoreUrl": "/videos/latest",
+      "videos": [
+        {
+          "id": "1",
+          "thumbnailUrl": "https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
+          "title": "ZyNerd Portal Demo - Explore All Features",
+          "uploadDate": "7 months ago",
+          "language": "English",
+          "tags": ["NEET UG 2025"],
+          "videoLink": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+        },
+        {
+          "id": "2",
+          "thumbnailUrl": "https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
+          "title": "ZyNerd Portal Demo - Explore All Features",
+          "uploadDate": "7 months ago",
+          "language": "தமிழ்",
+          "tags": ["NEET UG 2025", "தமிழ்"],
+          "videoLink": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+        },
+        {
+          "id": "3",
+          "thumbnailUrl": "https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
+          "title": "All India Counselling | Complete Info Guide | NEET UG - 2025 | Tamil",
+          "uploadDate": "8 months ago",
+          "language": "தமிழ்",
+          "tags": ["NEET UG 2025"],
+          "videoLink": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+        },
+        {
+          "id": "4",
+          "thumbnailUrl": "https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
+          "title": "All India Counselling | Complete Info Guide | NEET UG - 2025 | English",
+          "uploadDate": "8 months ago",
+          "language": "English",
+          "tags": ["NEET UG 2025"],
+          "videoLink": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+        },
+        {
+          "id": "5",
+          "thumbnailUrl": "https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
+          "title": "Haryana State Quota (MBBS/BDS) - How to apply | Online Registration Demo",
+          "uploadDate": "6 months ago",
+          "language": "English",
+          "tags": ["Haryana", "MBBS", "BDS"],
+          "videoLink": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+        }
+      ]
+    },
+    {
+      "id": "neet-ug-2025",
+      "title": "NEET UG 2025 - Guides & FAQs",
+      "viewMoreUrl": "/videos/neet-ug-2025",
+      "videos": [
+        {
+          "id": "6",
+          "thumbnailUrl": "https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
+          "title": "NEET UG 2025 - ALL INDIA COUNSELLING - COMPLETE INFO GUIDE",
+          "uploadDate": "8 months ago",
+          "language": "English",
+          "tags": ["NEET UG 2025"],
+          "videoLink": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+        },
+        {
+          "id": "7",
+          "thumbnailUrl": "https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
+          "title": "NEET UG 2025 - ALL INDIA COUNSELLING - COMPLETE INFO GUIDE",
+          "uploadDate": "8 months ago",
+          "language": "தமிழ்",
+          "tags": ["NEET UG 2025"],
+          "videoLink": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+        },
+        {
+          "id": "8",
+          "thumbnailUrl": "https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
+          "title": "NEET UG 2025 - KEAM-2025 (MBBS/BDS) മലയാളം - NOTIFICATION EXPLAINED | FIRST PHASE STATE COUNSELLING RESCHEDULED",
+          "uploadDate": "7 months ago",
+          "language": "മലയാളം",
+          "tags": ["NEET UG 2025", "KEAM"],
+          "videoLink": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+        },
+        {
+          "id": "9",
+          "thumbnailUrl": "https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
+          "title": "NEET UG 2025 - Punjab State Quota (MBBS/BDS) - Complete Info Guide",
+          "uploadDate": "7 months ago",
+          "language": "English",
+          "tags": ["NEET UG 2025", "Punjab"],
+          "videoLink": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+        },
+        {
+          "id": "10",
+          "thumbnailUrl": "https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
+          "title": "NEET UG 2025 - PwBD Candidates - Disability Certificate & Disability Centre | ALL INDIA COUNSELLING & STATE COUNSELLING",
+          "uploadDate": "6 months ago",
+          "language": "English",
+          "tags": ["NEET UG 2025", "PwBD"],
+          "videoLink": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+        }
+      ]
+    }
+  ]
+}
