@@ -1,5 +1,3 @@
-'use client';
-
 import Modal from '@/common/Modal';
 import {BASE_URL, UPDATE_USER_PROFILE_PATH, USER_DATA_KEY} from '@/constants';
 import {CalenderProfileIcon} from '@/elements/Icons';
@@ -11,17 +9,14 @@ import {updateUserData} from 'lib/redux/slices/userSlice';
 import React, {useContext, useState} from 'react';
 import {useDispatch} from 'react-redux';
 import * as Yup from 'yup';
-
 const ProfileEditModal: React.FC<any> = ({
   isOpen,
   onClose,
-
   userData,
 }) => {
   const dispatch = useDispatch();
   const {setUserData, region} = useContext(UserContext);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
   // Create validation schema for all fields
   const getValidationSchema = () => {
     return Yup.object().shape({
@@ -35,7 +30,6 @@ const ProfileEditModal: React.FC<any> = ({
       birthday: Yup.string().required('Birthday is required'),
     });
   };
-
   const getInitialValues = () => {
     // Format birthday to YYYY-MM-DD for date input
     const formatBirthdayForInput = (dateString: string) => {
@@ -44,7 +38,6 @@ const ProfileEditModal: React.FC<any> = ({
       if (isNaN(date.getTime())) return '';
       return date.toISOString().split('T')[0]; // Returns YYYY-MM-DD format
     };
-
     // Strip leading +<region> from whatsapp if present for cleaner editing
     const fullWhatsapp: string =
       ((userData as any)?.whatsapp_no as string) || '';
@@ -52,7 +45,6 @@ const ProfileEditModal: React.FC<any> = ({
     const whatsappDigits = fullWhatsapp.startsWith(regionPrefix)
       ? fullWhatsapp.slice(regionPrefix.length).trim()
       : fullWhatsapp;
-
     const u = userData as any;
     return {
       fullName: u?.first_name + ' ' + u?.last_name || '',
@@ -60,7 +52,6 @@ const ProfileEditModal: React.FC<any> = ({
       birthday: formatBirthdayForInput(String(u?.birth_date || '')),
     };
   };
-
   const handleSubmit = async (values: {
     fullName: string;
     whatsapp: string;
@@ -76,23 +67,19 @@ const ProfileEditModal: React.FC<any> = ({
         whatsapp_no: `+${region || ''}${String(values.whatsapp || '').replace(/\s+/g, '')}`,
         birth_date: values?.birthday,
       };
-
       const response = await fetchHelper(
         BASE_URL + UPDATE_USER_PROFILE_PATH,
         'PATCH',
         payload,
       );
-
       if (response.status === 200) {
         const newData = {
           ...(userData && typeof userData === 'object' ? userData : {}),
           ...payload,
         };
-
         dispatch(updateUserData(newData as any));
         setUserData && setUserData(newData as any);
         localStorage.setItem(USER_DATA_KEY, JSON.stringify(newData));
-
         showToast('success', 'Profile updated successfully');
         onClose();
       } else {
@@ -104,7 +91,6 @@ const ProfileEditModal: React.FC<any> = ({
       setIsSubmitting(false);
     }
   };
-
   return (
     <Modal
       isOpen={isOpen}
@@ -115,7 +101,6 @@ const ProfileEditModal: React.FC<any> = ({
         <h2 className="text-2xl font-besley text-primary-dark mb-6 ">
           Edit Profile
         </h2>
-
         <Formik
           initialValues={getInitialValues()}
           validationSchema={getValidationSchema()}
@@ -136,9 +121,7 @@ const ProfileEditModal: React.FC<any> = ({
               values.fullName !== initialValues.fullName ||
               values.whatsapp !== initialValues.whatsapp ||
               values.birthday !== initialValues.birthday;
-
             const isSaveDisabled = isSubmitting || !hasChanges || !isValid;
-
             return (
               <Form className="space-y-4">
                 {/* Full Name Field */}
@@ -161,7 +144,6 @@ const ProfileEditModal: React.FC<any> = ({
                     </div>
                   )}
                 </div>
-
                 {/* WhatsApp Number Field */}
                 <div>
                   <label className="block text-xs font-interMedium text-primary-dark mb-2">
@@ -191,7 +173,6 @@ const ProfileEditModal: React.FC<any> = ({
                     </div>
                   )}
                 </div>
-
                 {/* Birthday Field */}
                 <div>
                   <label className="block text-xs font-interMedium text-primary-dark mb-2">
@@ -227,7 +208,6 @@ const ProfileEditModal: React.FC<any> = ({
                     </div>
                   )}
                 </div>
-
                 <div className="flex space-x-3 pt-6">
                   <button
                     type="submit"
@@ -251,5 +231,4 @@ const ProfileEditModal: React.FC<any> = ({
     </Modal>
   );
 };
-
 export default ProfileEditModal;

@@ -1,13 +1,9 @@
-'use client';
-
 import {EllipsisVerticalIcon} from '@heroicons/react/24/outline';
 import Image from 'next/image';
 import {useState} from 'react';
 import type {IVideoCardProps} from '@/types/videos.types';
-
 const VideoCard = ({video, onVideoClick}: IVideoCardProps) => {
   const [showOptions, setShowOptions] = useState(false);
-
   return (
     <div className="flex-shrink-0 w-[260px] min-w-[260px] sm:w-[280px] sm:min-w-[280px] md:w-[300px] md:min-w-[300px] group">
       <div className="bg-white rounded-lg sm:rounded-xl shadow-sm border border-customGray-10 overflow-hidden hover:shadow-md transition-shadow">
@@ -41,7 +37,6 @@ const VideoCard = ({video, onVideoClick}: IVideoCardProps) => {
             </div>
           </div>
         </div>
-
         {/* Content */}
         <div className="p-2.5 sm:p-3 flex gap-2">
           <div className="flex-1 min-w-0">
@@ -90,5 +85,4 @@ const VideoCard = ({video, onVideoClick}: IVideoCardProps) => {
     </div>
   );
 };
-
 export default VideoCard;

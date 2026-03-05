@@ -1,5 +1,3 @@
-'use client';
-
 import {collegeStates, collegeYears} from '@/constants';
 import {
   AcademicCapIcon,
@@ -13,7 +11,6 @@ import type React from 'react';
 import {useState} from 'react';
 import {useSelector} from 'react-redux';
 import EducationEditModal from './EducationEditModal';
-
 const Row: React.FC<{
   icon: React.ReactNode;
   label: string;
@@ -36,11 +33,9 @@ const Row: React.FC<{
     </div>
   );
 };
-
 const EducationRight: React.FC = () => {
   const userData = useSelector((state: RootState) => state.user.userInfo);
   const [isOpen, setIsOpen] = useState(false);
-
   // Helper function to get display value for college_state and current_year
   const getDisplayValue = (value: any, isCollegeState = false) => {
     if (typeof value === 'object' && value?.name) {
@@ -96,5 +91,4 @@ const EducationRight: React.FC = () => {
     </div>
   );
 };
-
 export default EducationRight;

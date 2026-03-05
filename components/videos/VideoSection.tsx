@@ -1,9 +1,6 @@
-'use client';
-
 import {useRouter} from 'next/router';
 import type {IVideoSectionProps} from '@/types/videos.types';
 import VideoCard from './VideoCard';
-
 const VideoSection = ({
   title,
   viewMoreUrl,
@@ -11,9 +8,7 @@ const VideoSection = ({
   onVideoClick,
 }: IVideoSectionProps) => {
   const router = useRouter();
-
   if (!videos || videos.length === 0) return null;
-
   return (
     <section className="mb-6 sm:mb-8">
       <div className="flex items-center justify-between px-4 sm:px-6 lg:px-8 mb-3 sm:mb-4 gap-2">
@@ -43,5 +38,4 @@ const VideoSection = ({
     </section>
   );
 };
-
 export default VideoSection;

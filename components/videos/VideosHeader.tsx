@@ -1,16 +1,11 @@
-'use client';
-
 import {ArrowLeftIcon, BookmarkIcon} from '@heroicons/react/24/outline';
 import {useRouter} from 'next/router';
 import UserAvatar from '../common/UserAvatar';
-
 const VideosHeader = () => {
   const router = useRouter();
-
   const handleSavedVideosClick = () => {
     router.push('/bookmark-collection');
   };
-
   return (
     <header className="w-full bg-white border-b border-gray-200 sticky top-0 z-50 p-2 sm:p-[5.76px]">
       <div className="w-full px-2 sm:px-4 lg:px-6">
@@ -25,7 +20,6 @@ const VideosHeader = () => {
               Videos
             </h1>
           </div>
-
           <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0">
             <button
               onClick={handleSavedVideosClick}
@@ -42,5 +36,4 @@ const VideosHeader = () => {
     </header>
   );
 };
-
 export default VideosHeader;

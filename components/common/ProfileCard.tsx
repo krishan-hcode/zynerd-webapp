@@ -1,10 +1,7 @@
-'use client';
-
 import {PencilIcon, ProfilePageIcon, ProfileTrophyIcon} from '@/elements/Icons';
 import {classNames} from '@/utils/utils';
 import Image from 'next/image';
 import type React from 'react';
-
 const ProfileCard: React.FC<any> = ({
   firstName,
   lastName,
@@ -28,7 +25,6 @@ const ProfileCard: React.FC<any> = ({
             transform: 'scaleX(-1) scaleY(-1)',
           }}></div>
         <div className="absolute inset-0 bg-gradient-to-br from-lightBlue-900/80 to-lightBlue-800/70 rounded-2xl"></div>
-
         <div className="absolute -top-8 left-5 z-30">
           {imageUrl ? (
             <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl flex items-center justify-center shadow-lg overflow-hidden">
@@ -46,7 +42,6 @@ const ProfileCard: React.FC<any> = ({
             </div>
           )}
         </div>
-
         {percentile && (
           <div className="absolute -top-8 -right-3 z-30">
             <div className="bg-orange_900 text-white px-3 py-2.5 rounded-lg flex items-center space-x-2 shadow-lg relative">
@@ -73,7 +68,6 @@ const ProfileCard: React.FC<any> = ({
               {course} - {year}
             </p>
           </div>
-
           <button
             onClick={onEditProfile}
             className="flex items-center space-x-1">

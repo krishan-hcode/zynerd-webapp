@@ -1,5 +1,3 @@
-'use client';
-
 import {IAddress} from '@/account/types';
 import Modal from '@/common/Modal';
 import {
@@ -16,7 +14,6 @@ import {updateAddress, updateUserData} from 'lib/redux/slices/userSlice';
 import React, {useContext, useState} from 'react';
 import {useDispatch} from 'react-redux';
 import * as Yup from 'yup';
-
 const getInitialValues = () => {
   return {
     address1: '',
@@ -29,7 +26,6 @@ const getInitialValues = () => {
     country: 'India',
   };
 };
-
 // Address Form Modal
 const AddressModal: React.FC<any> = ({isOpen, onClose, userData}) => {
   const dispatch = useDispatch();
@@ -38,26 +34,21 @@ const AddressModal: React.FC<any> = ({isOpen, onClose, userData}) => {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [savedAddress, setSavedAddress] = useState<IAddress | null>(null);
   const [formValues, setFormValues] = useState(getInitialValues());
-
   // Professional handler functions
   const handleConfirmModalClose = () => {
     setShowConfirmModal(false);
   };
-
   const handleAddressConfirm = async () => {
     if (!savedAddress) return;
-
     try {
       const response = await fetchHelper(
         BASE_URL + USER_ADDRESS_PATH,
         'POST',
         savedAddress,
       );
-
       if ([200, 201].includes(response.status) && response.data) {
         // Update Redux store
         dispatch(updateAddress(response.data));
-
         // Update context and localStorage
         const updatedUserData = {
           ...(userData && typeof userData === 'object' ? userData : {}),
@@ -66,7 +57,6 @@ const AddressModal: React.FC<any> = ({isOpen, onClose, userData}) => {
         dispatch(updateUserData(updatedUserData as any));
         setUserData && setUserData(updatedUserData as any);
         localStorage.setItem(USER_DATA_KEY, JSON.stringify(updatedUserData));
-
         showToast('success', 'Address saved successfully');
         setShowConfirmModal(false);
         onClose();
@@ -78,12 +68,10 @@ const AddressModal: React.FC<any> = ({isOpen, onClose, userData}) => {
       showToast('error', 'Something went wrong. Please try again.');
     }
   };
-
   const handleAddressEdit = () => {
     setShowConfirmModal(false);
     // Keep the address modal open for editing
   };
-
   // Validation schema for address form
   const getValidationSchema = () => {
     return Yup.object().shape({
@@ -104,7 +92,6 @@ const AddressModal: React.FC<any> = ({isOpen, onClose, userData}) => {
       gst: Yup.string(),
     });
   };
-
   const handleSubmit = async (values: any) => {
     setIsSubmitting(true);
     try {
@@ -113,7 +100,6 @@ const AddressModal: React.FC<any> = ({isOpen, onClose, userData}) => {
         ...values,
         country: 'IN',
       };
-
       setFormValues(values);
       setSavedAddress(addressData);
       setShowConfirmModal(true);
@@ -124,12 +110,10 @@ const AddressModal: React.FC<any> = ({isOpen, onClose, userData}) => {
       setIsSubmitting(false);
     }
   };
-
   const handleClose = () => {
     setShowConfirmModal(false);
     onClose();
   };
-
   return (
     <>
       <Modal
@@ -142,7 +126,6 @@ const AddressModal: React.FC<any> = ({isOpen, onClose, userData}) => {
           <h2 className="text-2xl font-regular text-primary-dark mb-6 font-besley">
             Address for Notes Delivery
           </h2>
-
           <Formik
             initialValues={formValues}
             validationSchema={getValidationSchema()}
@@ -171,7 +154,6 @@ const AddressModal: React.FC<any> = ({isOpen, onClose, userData}) => {
                     </div>
                   )}
                 </div>
-
                 {/* Area, Street, Sector, Village */}
                 <div>
                   <label className="block text-xs font-interMedium text-primary-dark mb-2">
@@ -193,7 +175,6 @@ const AddressModal: React.FC<any> = ({isOpen, onClose, userData}) => {
                     </div>
                   )}
                 </div>
-
                 {/* Landmark */}
                 <div>
                   <label className="block text-xs font-interMedium text-primary-dark mb-2">
@@ -214,7 +195,6 @@ const AddressModal: React.FC<any> = ({isOpen, onClose, userData}) => {
                     </div>
                   )}
                 </div>
-
                 {/* Country */}
                 <div>
                   <label className="block text-xs font-interMedium text-primary-dark mb-2">
@@ -228,7 +208,6 @@ const AddressModal: React.FC<any> = ({isOpen, onClose, userData}) => {
                     className={`w-full p-4 border rounded-md focus:outline-none focus:ring-0 focus:ring-white border-gray-300 bg-gray-100 text-sm font-openSauceOneMedium text-primary-dark  disabled:font-openSauceOneMedium disabled:text-customGray-60`}
                   />
                 </div>
-
                 {/* State */}
                 <div>
                   <label className="block text-xs font-interMedium text-primary-dark mb-2">
@@ -256,7 +235,6 @@ const AddressModal: React.FC<any> = ({isOpen, onClose, userData}) => {
                     </div>
                   )}
                 </div>
-
                 {/* City */}
                 <div>
                   <label className="block text-xs font-interMedium text-primary-dark mb-2">
@@ -277,7 +255,6 @@ const AddressModal: React.FC<any> = ({isOpen, onClose, userData}) => {
                     </div>
                   )}
                 </div>
-
                 {/* Pincode */}
                 <div>
                   <label className="block text-xs font-interMedium text-primary-dark mb-2">
@@ -298,7 +275,6 @@ const AddressModal: React.FC<any> = ({isOpen, onClose, userData}) => {
                     </div>
                   )}
                 </div>
-
                 <div className="flex space-x-3">
                   <button
                     type="submit"
@@ -321,7 +297,6 @@ const AddressModal: React.FC<any> = ({isOpen, onClose, userData}) => {
           </Formik>
         </div>
       </Modal>
-
       {/* Confirm Address Modal */}
       <ConfirmAddressModal
         isOpen={showConfirmModal}
@@ -333,7 +308,6 @@ const AddressModal: React.FC<any> = ({isOpen, onClose, userData}) => {
     </>
   );
 };
-
 // Confirm Address Modal
 const ConfirmAddressModal: React.FC<any> = ({
   isOpen,
@@ -343,7 +317,6 @@ const ConfirmAddressModal: React.FC<any> = ({
   onEdit,
 }) => {
   if (!address) return null;
-
   const formatAddress = (addr: IAddress) => {
     const parts = [
       addr.address1,
@@ -352,10 +325,8 @@ const ConfirmAddressModal: React.FC<any> = ({
       collegeStates.find(s => s.key === addr.country_state)?.name,
       addr.pincode,
     ].filter(Boolean);
-
     return parts.join(', ');
   };
-
   return (
     <Modal
       isOpen={isOpen}
@@ -369,7 +340,6 @@ const ConfirmAddressModal: React.FC<any> = ({
         <p className="text-base text-customGray-90 mb-6 font-openSauceOneMedium">
           Please confirm below details
         </p>
-
         <div className="bg-white border border-customGray-10 px-3 py-4 rounded-lg mb-6">
           <div className="flex flex-col gap-2">
             <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-primaryBlue/10 flex items-center justify-center">
@@ -380,7 +350,6 @@ const ConfirmAddressModal: React.FC<any> = ({
             </div>
           </div>
         </div>
-
         <div className="flex space-x-3">
           <button
             type="button"
@@ -399,5 +368,4 @@ const ConfirmAddressModal: React.FC<any> = ({
     </Modal>
   );
 };
-
 export default AddressModal;

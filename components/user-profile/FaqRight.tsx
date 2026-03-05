@@ -1,5 +1,3 @@
-'use client';
-
 import {BASE_URL, GET_FAQ_ROUTE, PATCH_FAQ_ROUTE} from '@/constants';
 import {
   DropArrowDownIcon,
@@ -11,9 +9,7 @@ import {
 import Colors from '@/styles/colors';
 import {fetchHelper, showToast} from '@/utils/helpers';
 import React, {useCallback, useEffect, useState} from 'react';
-
 type IFaq = {id: number | string; question: string; solution: string};
-
 const ThumbButton: React.FC<{
   selected: boolean;
   onClick: () => void;
@@ -40,14 +36,12 @@ const ThumbButton: React.FC<{
     </button>
   );
 };
-
 const Accordion: React.FC<{
   item: IFaq;
   isOpen: boolean;
   onToggle: () => void;
 }> = ({item, isOpen, onToggle}) => {
   const [isHelpful, setIsHelpful] = useState<boolean | null>(null);
-
   const handleFeedback = useCallback(async () => {
     if (isHelpful === null) return;
     try {
@@ -58,11 +52,9 @@ const Accordion: React.FC<{
       showToast('error', 'Failed to submit feedback');
     }
   }, [isHelpful, item.id]);
-
   useEffect(() => {
     handleFeedback();
   }, [handleFeedback]);
-
   return (
     <div className="py-3">
       <button
@@ -79,7 +71,6 @@ const Accordion: React.FC<{
           )}
         </span>
       </button>
-
       {isOpen && (
         <div className="bg-white border border-gray-200 rounded-xl p-4  mb-6">
           <div
@@ -107,14 +98,12 @@ const Accordion: React.FC<{
     </div>
   );
 };
-
 const FaqRight: React.FC = () => {
   const [faqList, setFaqList] = useState<IFaq[]>([]);
   const [filtered, setFiltered] = useState<IFaq[]>([]);
   const [query, setQuery] = useState('');
   const [openIdx, setOpenIdx] = useState<number>(-1);
   const [isLoading, setIsLoading] = useState(false);
-
   const fetchFaqs = useCallback(async () => {
     try {
       setIsLoading(true);
@@ -129,11 +118,9 @@ const FaqRight: React.FC = () => {
       setIsLoading(false);
     }
   }, []);
-
   useEffect(() => {
     fetchFaqs();
   }, [fetchFaqs]);
-
   useEffect(() => {
     if (!query || query.trim().length < 2) {
       setFiltered(faqList);
@@ -142,7 +129,6 @@ const FaqRight: React.FC = () => {
       setFiltered(faqList.filter(f => f.question?.toLowerCase?.().includes(q)));
     }
   }, [query, faqList]);
-
   return (
     <div className="h-full bg-white lg:overflow-y-auto scrollbar-hide">
       <div className="mx-auto px-6 py-6">
@@ -157,7 +143,6 @@ const FaqRight: React.FC = () => {
             className="flex-1 outline-none text-xs font-inter font-medium text-customGray-40 py-2"
           />
         </div>
-
         {isLoading ? (
           <div className="space-y-4">
             {Array.from({length: 4}).map((_, i) => (
@@ -183,5 +168,4 @@ const FaqRight: React.FC = () => {
     </div>
   );
 };
-
 export default FaqRight;

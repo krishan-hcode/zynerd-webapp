@@ -1,5 +1,3 @@
-'use client';
-
 import {
   ChevronDownIcon,
   MagnifyingGlassIcon,
@@ -7,7 +5,6 @@ import {
 import {useState} from 'react';
 import type {IVideoSearchFilterProps} from '@/types/videos.types';
 import {classNames} from '@/utils/utils';
-
 const VideoSearchFilter = ({
   searchQuery,
   onSearchChange,
@@ -25,9 +22,7 @@ const VideoSearchFilter = ({
 }: IVideoSearchFilterProps) => {
   const [showCounsellingDropdown, setShowCounsellingDropdown] = useState(false);
   const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
-
   const years = ['2025', '2024'];
-
   return (
     <div className="w-full px-4 sm:px-6 lg:px-8 py-4 sm:py-5 space-y-4">
       {/* Search Bar */}
@@ -41,7 +36,6 @@ const VideoSearchFilter = ({
           className="w-full pl-10 sm:pl-12 pr-4 py-2.5 sm:py-3 rounded-xl bg-customGray-5 border border-customGray-10 text-primary-dark font-inter text-sm placeholder:text-customGray-50 focus:outline-none focus:ring-2 focus:ring-primary-blue/20 focus:border-primary-blue"
         />
       </div>
-
       {/* Year Filters */}
       <div className="flex gap-2 flex-wrap">
         {years.map(year => (
@@ -58,7 +52,6 @@ const VideoSearchFilter = ({
           </button>
         ))}
       </div>
-
       {/* Dropdown Filters */}
       <div className="flex flex-col sm:flex-row flex-wrap gap-3">
         {/* Counselling Dropdown */}
@@ -106,7 +99,6 @@ const VideoSearchFilter = ({
             </>
           )}
         </div>
-
         {/* Language Dropdown */}
         <div className="relative w-full sm:w-auto sm:min-w-[160px]">
           <button
@@ -151,7 +143,6 @@ const VideoSearchFilter = ({
           )}
         </div>
       </div>
-
       {/* Tags - Horizontal Scroll */}
       <div className="overflow-x-auto scrollbar-hide -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 [&::-webkit-scrollbar]:hidden">
         <div className="flex gap-2 pb-2 min-w-max">
@@ -183,5 +174,4 @@ const VideoSearchFilter = ({
     </div>
   );
 };
-
 export default VideoSearchFilter;

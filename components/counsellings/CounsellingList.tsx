@@ -1,13 +1,8 @@
-'use client';
-
 import {AcademicCapIcon} from '@heroicons/react/24/outline';
 import {useRouter} from 'next/router';
-
 import type {ICounsellingListProps} from '@/types/counsellings.types';
-
 const CounsellingList = ({counsellings, totalCount}: ICounsellingListProps) => {
   const router = useRouter();
-
   if (counsellings.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-20 text-customGray-50 font-inter">
@@ -16,14 +11,12 @@ const CounsellingList = ({counsellings, totalCount}: ICounsellingListProps) => {
       </div>
     );
   }
-
   return (
     <div className="w-full px-4 sm:px-6 lg:px-8 pb-8">
       {/* Result count */}
       <p className="text-xs sm:text-sm font-inter text-customGray-50 mb-6 text-center">
         {totalCount} Counsellings found
       </p>
-
       {/* Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 3xl:grid-cols-6 gap-4 sm:gap-6">
         {counsellings.map(item => (
@@ -50,5 +43,4 @@ const CounsellingList = ({counsellings, totalCount}: ICounsellingListProps) => {
     </div>
   );
 };
-
 export default CounsellingList;

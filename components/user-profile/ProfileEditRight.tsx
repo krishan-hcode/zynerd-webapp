@@ -1,5 +1,3 @@
-'use client';
-
 import {
   AUTH_TOKEN_KEY,
   BASE_URL,
@@ -31,7 +29,6 @@ import {useContext, useEffect, useRef, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import AddressModal from './AddressModal';
 import ProfileEditModal from './ProfileEditModal';
-
 const EditProfileForm = () => {
   const userData = useSelector((state: RootState) => state.user.userInfo);
   const dispatch = useDispatch();
@@ -45,7 +42,6 @@ const EditProfileForm = () => {
   const [profileData, setProfileData] = useState<IProfileField[]>([]);
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
   const hasProfilePhoto = selectedImage || userData?.image_file;
-
   // Profile field configuration
   const getProfileFieldConfig = () => [
     {
@@ -87,14 +83,12 @@ const EditProfileForm = () => {
       editable: true,
     },
   ];
-
   // Upload image function
   const uploadImage = async (file: File) => {
     setIsUploading(true);
     try {
       // Get auth token from localStorage
       const authToken = localStorage.getItem(AUTH_TOKEN_KEY);
-
       if (!authToken) {
         showToast(
           'error',
@@ -102,19 +96,15 @@ const EditProfileForm = () => {
         );
         return;
       }
-
       // Create FormData for file upload
       const formData = new FormData();
       formData.append('image_file', file);
-
       // Make API call to update profile image
-
       const response = await fetchHelper(
         BASE_URL + UPDATE_USER_PROFILE_PATH,
         'PATCH',
         formData,
       );
-
       if (response.status === 200 && response.data) {
         const updatedImageFile = response.data.image_file;
         const newData = {
@@ -122,17 +112,12 @@ const EditProfileForm = () => {
           image_file: updatedImageFile,
         } as IUserData;
         // Update Redux store
-
         dispatch(updateUserData(newData));
-
         // Update context
         setUserData && setUserData(newData);
-
         // Update localStorage
         localStorage.setItem(USER_DATA_KEY, JSON.stringify(newData));
-
         showToast('success', 'Profile image updated successfully');
-
         // Reset the selected image and file
         setSelectedImage(null);
         setSelectedFile(null);
@@ -145,71 +130,58 @@ const EditProfileForm = () => {
       setIsUploading(false);
     }
   };
-
   // Handle file selection
   const handleFileSelect = async (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const file = event.target.files?.[0];
     if (!file) return;
-
     const validationError = validateFile(file);
     if (validationError) {
       alert(validationError);
       return;
     }
-
     // Store the file for upload
     setSelectedFile(file);
-
     // Create preview URL
     const reader = new FileReader();
     reader.onload = e => {
       setSelectedImage(e.target?.result as string);
     };
     reader.readAsDataURL(file);
-
     // Automatically upload the image
     await uploadImage(file);
   };
-
   // Handle Add Photo button click
   const handleAddPhotoClick = () => {
     fileInputRef.current?.click();
   };
-
   // Handle image upload (for manual save button)
   const handleImageUpload = async () => {
     if (!selectedFile) return;
     await uploadImage(selectedFile);
   };
-
   // Handle edit field click
   const handleEditField = () => {
     setIsModalOpen(true);
   };
-
   // Handle modal close
   const handleModalClose = () => {
     setIsModalOpen(false);
     setActiveFieldId(null);
   };
-
   // Update profile data when userData changes
   useEffect(() => {
     if (userData) {
       setProfileData(getProfileFieldConfig());
     }
   }, [userData]);
-
   const handleAddAddressClick = () => {
     setIsAddressModalOpen(true);
   };
-
   const handleAddressModalClose = () => {
     setIsAddressModalOpen(false);
   };
-
   // Helper function to check if address has valid data
   const hasValidAddress = (address: any) => {
     return (
@@ -221,7 +193,6 @@ const EditProfileForm = () => {
         address.country_state)
     );
   };
-
   // Helper function to format address display
   const formatAddressDisplay = (address: any) => {
     const stateName = collegeStates.find(
@@ -229,11 +200,9 @@ const EditProfileForm = () => {
     )?.name;
     return `${address.address1}, ${address.address2}, ${address.city}, ${stateName} - ${address.pincode}`;
   };
-
   // Render address section based on data availability
   const renderAddressSection = () => {
     const address = userData?.address_info?.[0];
-
     if (hasValidAddress(address)) {
       return (
         <div>
@@ -252,7 +221,6 @@ const EditProfileForm = () => {
         </div>
       );
     }
-
     return (
       <button
         onClick={handleAddAddressClick}
@@ -261,7 +229,6 @@ const EditProfileForm = () => {
       </button>
     );
   };
-
   return (
     <div className="bg-white rounded-2xl p-6 h-full">
       {/* Profile Photo Section */}
@@ -287,7 +254,6 @@ const EditProfileForm = () => {
             <ProfileWithoutBGIcon className="w-16 h-16 text-white" />
           )}
         </div>
-
         {/* Hidden file input */}
         <input
           ref={fileInputRef}
@@ -296,7 +262,6 @@ const EditProfileForm = () => {
           onChange={handleFileSelect}
           className="hidden"
         />
-
         <div className="flex flex-col space-y-2">
           <button
             onClick={handleAddPhotoClick}
@@ -313,7 +278,6 @@ const EditProfileForm = () => {
           </button>
         </div>
       </div>
-
       <div className="flex flex-row justify-end">
         <button
           onClick={() => handleEditField()}
@@ -322,7 +286,6 @@ const EditProfileForm = () => {
           <span>Edit</span>
         </button>
       </div>
-
       {/* Profile Fields */}
       <div className="space-y-6">
         {profileData.map(field => (
@@ -340,7 +303,6 @@ const EditProfileForm = () => {
             </div>
           </div>
         ))}
-
         {/* Address Section */}
         <div className="flex items-start space-x-4 border-b border-gray-200 pb-4">
           <div className="flex-shrink-0 mt-1">
@@ -354,14 +316,12 @@ const EditProfileForm = () => {
           </div>
         </div>
       </div>
-
       {/* Profile Edit Modal */}
       <ProfileEditModal
         isOpen={isModalOpen}
         onClose={handleModalClose}
         userData={userData}
       />
-
       {/* Address Modal */}
       <AddressModal
         isOpen={isAddressModalOpen}
@@ -371,5 +331,4 @@ const EditProfileForm = () => {
     </div>
   );
 };
-
 export default EditProfileForm;

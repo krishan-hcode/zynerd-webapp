@@ -1,5 +1,3 @@
-'use client';
-
 import ProfileCard from '@/common/ProfileCard';
 import SubscriptionCard from '@/common/SubscriptionCard';
 import {collegeYears} from '@/constants';
@@ -20,9 +18,7 @@ import {RootState} from 'lib/redux/store';
 import {useRouter} from 'next/router';
 import {useState} from 'react';
 import {useSelector} from 'react-redux';
-
 dayjs.extend(utc);
-
 const ProfileLeft = () => {
   const router = useRouter();
   const [showAllSubscriptions, setShowAllSubscriptions] = useState(false);
@@ -32,14 +28,11 @@ const ProfileLeft = () => {
   const {isPremium, isMissionPlan, isNonMissionPlan} = useUserSubscription(
     userInfo ?? undefined,
   );
-
   const isActiveSubscription = (startAt: string, duration: number) => {
     const endDate = dayjs.utc(startAt).add(duration, 'day');
     return !dayjs().isAfter(endDate);
   };
-
   // Transform subscription data from API
-
   const subscriptionData =
     userData?.subscription_info?.map((subscription: any) => ({
       title: subscription.plan__collection__name,
@@ -49,7 +42,6 @@ const ProfileLeft = () => {
         subscription.duration,
       ),
     })) || [];
-
   // Helper function to get display value for current_year (same as EducationRight)
   const getYearDisplayValue = (value: any) => {
     if (typeof value === 'object' && value?.name) {
@@ -61,11 +53,9 @@ const ProfileLeft = () => {
     }
     return '';
   };
-
   const toggleSubscriptions = () => {
     setShowAllSubscriptions(prev => !prev);
   };
-
   return (
     <div className="w-full space-y-4 md:space-y-6 font-sauce overflow-visible pt-10">
       <div className="relative">
@@ -80,14 +70,12 @@ const ProfileLeft = () => {
         {/* Always-visible soft blurred shadow below profile card */}
         <div className="absolute bottom-[-10px] left-1/2 -translate-x-1/2 w-3/4 h-3 bg-primaryBlue/60 blur-md rounded-full z-0" />
       </div>
-
       {/* Premium Section */}
       <div className="space-y-3 md:space-y-4">
         <h2 className="text-lg md:text-xl font-sauce font-bold text-lightBlue-900">
           Premium
         </h2>
         {/* Subscription section: show Buy button when no subscription; else list subscriptions */}
-
         <div className="flex flex-col justify-center space-y-2 md:space-y-3">
           {subscriptionData
             ?.slice(0, showAllSubscriptions ? subscriptionData.length : 1)
@@ -99,7 +87,6 @@ const ProfileLeft = () => {
                 isActive={subscription.isActive}
               />
             ))}
-
           {subscriptionData?.length > 1 && (
             <button
               onClick={toggleSubscriptions}
@@ -133,7 +120,6 @@ const ProfileLeft = () => {
             </div>
             <ChevronRightIcon className="w-4 h-4 md:w-5 md:h-5 text-gray-400 flex-shrink-0" />
           </button>
-
           <button
             onClick={() => router.push('/plans/only-notes')}
             className="w-full flex items-center justify-between px-3 pt-3 pb-5 border-b hover:bg-gray-50 rounded-lg transition-colors">
@@ -150,5 +136,4 @@ const ProfileLeft = () => {
     </div>
   );
 };
-
 export default ProfileLeft;

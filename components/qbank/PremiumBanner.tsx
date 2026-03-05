@@ -1,5 +1,3 @@
-'use client';
-
 import {
   PremiumBlueIcon,
   PremiumHeaderIcon,
@@ -8,7 +6,6 @@ import {
 import {classNames} from '@/utils/utils';
 import {ArrowRightIcon} from '@heroicons/react/24/outline';
 import PremiumBannerSkeleton from '../skeletons/PremiumBannerSkeleton';
-
 const PremiumBanner = ({
   isPremium,
   onUpgradeClick,
@@ -18,11 +15,9 @@ const PremiumBanner = ({
   bannerClassName,
 }: any) => {
   const isEligibleForPremium = isPremium;
-
   if (isLoading) {
     return <PremiumBannerSkeleton />;
   }
-
   const bannerBgClass = isEligibleForPremium
     ? 'bg-extras-blue10 p-2  max-h-20'
     : 'bg-blue-500 p-2';
@@ -36,7 +31,6 @@ const PremiumBanner = ({
   const iconColor = isEligibleForPremium
     ? 'text-lightBlue-400'
     : 'text-blue-100';
-
   return (
     <div className={`flex flex-col w-full ${className ?? ''}`}>
       {/* Banner container */}
@@ -92,5 +86,4 @@ const PremiumBanner = ({
     </div>
   );
 };
-
 export default PremiumBanner;

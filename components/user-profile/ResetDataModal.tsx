@@ -1,5 +1,3 @@
-'use client';
-
 import ConfirmationModal from '@/common/ConfirmationModal';
 import Modal from '@/common/Modal';
 import PremiumModal from '@/common/PremiumModal';
@@ -15,15 +13,12 @@ import {fetchHelper, showToast} from '@/utils/helpers';
 import {useAppSelector} from 'lib/redux/hooks/appHooks';
 import {useRouter} from 'next/router';
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
-
 type Props = {
   isOpen: boolean;
   onClose: () => void;
 };
-
 type ResetType = 'qbank' | 'test' | 'both';
 type ResetDatesIds = 'qbank' | 'test' | 'both';
-
 type ResetItem = {
   created_at: string;
   reset_type: 'qbank' | 'test';
@@ -31,7 +26,6 @@ type ResetItem = {
   user: number;
   next_reset_date: string;
 };
-
 const formatDate = (date: string | Date) => {
   const d = typeof date === 'string' ? new Date(date) : date;
   if (isNaN(d.getTime())) return '';
@@ -41,7 +35,6 @@ const formatDate = (date: string | Date) => {
     year: 'numeric',
   });
 };
-
 const ResetDataModal: React.FC<Props> = ({isOpen, onClose}) => {
   const router = useRouter();
   const userInfo = useAppSelector(state => state.user.userInfo);
@@ -51,7 +44,6 @@ const ResetDataModal: React.FC<Props> = ({isOpen, onClose}) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [enableResetFeatureOpen, setEnableResetFeatureOpen] = useState(false);
-
   const [isQbankInProgress, setIsQbankInProgress] = useState(false);
   const [isTestInProgress, setIsTestInProgress] = useState(false);
   const [isQbankDisabled, setIsQbankDisabled] = useState(false);
@@ -63,7 +55,6 @@ const ResetDataModal: React.FC<Props> = ({isOpen, onClose}) => {
     test: {lastResetDate: ''},
     both: {lastResetDate: ''},
   });
-
   const items = useMemo(
     () => [
       {
@@ -91,18 +82,15 @@ const ResetDataModal: React.FC<Props> = ({isOpen, onClose}) => {
     ],
     [],
   );
-
   const disableSelectable = (id: number): boolean => {
     if (id === 1) {
       // QBank only
       return isQbankInProgress || isQbankDisabled;
     }
-
     if (id === 2) {
       // Test only
       return isTestInProgress || isTestDisabled;
     }
-
     if (id === 3) {
       // Both: disable if either side is unavailable
       return (
@@ -112,10 +100,8 @@ const ResetDataModal: React.FC<Props> = ({isOpen, onClose}) => {
         isTestDisabled
       );
     }
-
     return false;
   };
-
   const isIndividualSelected =
     (isQbankInProgress ||
       isQbankDisabled ||
@@ -125,18 +111,14 @@ const ResetDataModal: React.FC<Props> = ({isOpen, onClose}) => {
       (isQbankInProgress || isQbankDisabled) &&
       (isTestInProgress || isTestDisabled)
     );
-
   const fetchProgress = useCallback(async () => {
     try {
       const res = await fetchHelper(BASE_URL + RESET_DATA, 'GET');
       const data: ResetItem[] = (res?.data || []) as ResetItem[];
-
       let latestQBank: ResetItem | null = null;
       let latestTest: ResetItem | null = null;
-
       data.forEach(item => {
         const created = new Date(item.created_at);
-
         if (item.reset_type === 'qbank') {
           if (!latestQBank || created > new Date(latestQBank.created_at)) {
             latestQBank = item;
@@ -148,7 +130,6 @@ const ResetDataModal: React.FC<Props> = ({isOpen, onClose}) => {
             qbank: {lastResetDate: formatDate(created)},
           }));
         }
-
         if (item.reset_type === 'test') {
           if (!latestTest || created > new Date(latestTest.created_at)) {
             latestTest = item;
@@ -163,23 +144,19 @@ const ResetDataModal: React.FC<Props> = ({isOpen, onClose}) => {
         if (latestQBank && latestTest) {
           const qbankDate = new Date(latestQBank.created_at);
           const testDate = new Date(latestTest.created_at);
-
           const mostRecent = qbankDate > testDate ? latestQBank : latestTest;
-
           setResetDates(prev => ({
             ...prev,
             both: {lastResetDate: formatDate(mostRecent.created_at)},
           }));
         }
       });
-
       // ✅ Only set "both" if both qbank & test resets exist
     } catch (_e) {
       setIsQbankDisabled(true);
       setIsTestDisabled(true);
     }
   }, []);
-
   const handleSubmit = useCallback(async () => {
     try {
       // Determine selected type
@@ -189,7 +166,6 @@ const ResetDataModal: React.FC<Props> = ({isOpen, onClose}) => {
       if (selectedIndex === 2) type = 'both';
       setIsConfirmOpen(false);
       if (!type) return;
-
       // Optimistic disable UI immediately based on selection
       if (type === 'qbank') {
         setIsQbankInProgress(true);
@@ -203,7 +179,6 @@ const ResetDataModal: React.FC<Props> = ({isOpen, onClose}) => {
         setIsQbankDisabled(true);
         setIsTestDisabled(true);
       }
-
       if (type === 'both') {
         const [qbankRes, testRes] = await Promise.all([
           fetchHelper(BASE_URL + RESET_DATA, 'POST', {type: 'qbank'}),
@@ -222,7 +197,6 @@ const ResetDataModal: React.FC<Props> = ({isOpen, onClose}) => {
         }
       } else {
         const res = await fetchHelper(BASE_URL + RESET_DATA, 'POST', {type});
-
         if (res) {
           const message =
             type === 'qbank'
@@ -252,11 +226,9 @@ const ResetDataModal: React.FC<Props> = ({isOpen, onClose}) => {
       showToast('error', e?.message || 'Failed to reset data');
     }
   }, [selectedIndex, onClose, fetchProgress]);
-
   useEffect(() => {
     if (isOpen && enableResetFeature) fetchProgress();
   }, [isOpen, fetchProgress]);
-
   return (
     <>
       <Modal
@@ -273,13 +245,11 @@ const ResetDataModal: React.FC<Props> = ({isOpen, onClose}) => {
           </div>
           <h2 className="text-3xl font-besley text-primary-dark">Reset Data</h2>
         </div>
-
         <div className="mt-4 space-y-4">
           <p className="text-xl text-primary-dark font-openSauceOneMedium">
             You can reset your activity for QBanks and Tests to start over with
             a clear record.
           </p>
-
           <div className="space-y-4">
             {items?.map((item, index) => {
               const disabled =
@@ -337,7 +307,6 @@ const ResetDataModal: React.FC<Props> = ({isOpen, onClose}) => {
               );
             })}
           </div>
-
           <div className="mt-2 flex flex-row border border-[#7dc4f8] bg-blue-50 p-4 rounded-xl items-center gap-2">
             <div>
               <ResetInfoCircleIcon />
@@ -353,7 +322,6 @@ const ResetDataModal: React.FC<Props> = ({isOpen, onClose}) => {
               to know how many times you can reset as per your plan.
             </p>
           </div>
-
           <div className="pt-2 border-t border-customGray-10 mt-2" />
           <div className="w-full flex ">
             <button
@@ -376,7 +344,6 @@ const ResetDataModal: React.FC<Props> = ({isOpen, onClose}) => {
           </div>
         </div>
       </Modal>
-
       <ConfirmationModal
         isModalOpen={isConfirmOpen}
         setIsModalOpen={setIsConfirmOpen}
@@ -392,7 +359,6 @@ const ResetDataModal: React.FC<Props> = ({isOpen, onClose}) => {
         buttonText="Confirm Reset"
         onClick={handleSubmit}
       />
-
       {/* Premium paywall */}
       <PremiumModal
         isOpen={enableResetFeatureOpen}
@@ -405,5 +371,4 @@ const ResetDataModal: React.FC<Props> = ({isOpen, onClose}) => {
     </>
   );
 };
-
 export default ResetDataModal;

@@ -1,5 +1,3 @@
-'use client';
-
 import Modal from '@/common/Modal';
 import {
   BASE_URL,
@@ -21,14 +19,12 @@ import {RootState} from 'lib/redux/store';
 import React, {useEffect, useMemo, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import * as Yup from 'yup';
-
 type EducationValues = {
   course: string;
   college_state: string;
   college: string;
   current_year: string;
 };
-
 // Extended user data type that can handle both string and object formats
 interface ExtendedUserData extends Omit<
   IUserData,
@@ -37,44 +33,36 @@ interface ExtendedUserData extends Omit<
   college_state: string | {key: string; name: string};
   current_year: string | {key: string; name: string};
 }
-
 interface Course {
   id: string | number;
   name: string;
 }
-
 interface College {
   id: string | number;
   name: string;
 }
-
 // Helper function to convert string to number for course/college IDs
 const convertToNumber = (id: string | number): number => {
   return typeof id === 'string' ? parseInt(id, 10) : id;
 };
-
 interface CollegeState {
   key: string;
   name: string;
 }
-
 interface CollegeYear {
   key: string;
   name: string;
 }
-
 interface EducationEditModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
-
 const ValidationSchema = Yup.object().shape({
   course: Yup.string().required('Required'),
   college_state: Yup.string().required('Required'),
   college: Yup.string().required('Required'),
   current_year: Yup.string().required('Required'),
 });
-
 const EducationEditModal: React.FC<EducationEditModalProps> = ({
   isOpen,
   onClose,
@@ -84,7 +72,6 @@ const EducationEditModal: React.FC<EducationEditModalProps> = ({
   const [courses, setCourses] = useState<Course[]>([]);
   const [colleges, setColleges] = useState<College[]>([]);
   const [loading, setLoading] = useState(false);
-
   const initialValues: EducationValues = useMemo(() => {
     return {
       course: userData?.course?.id?.toString?.() || '',
@@ -99,7 +86,6 @@ const EducationEditModal: React.FC<EducationEditModalProps> = ({
           : userData?.current_year || '',
     };
   }, [userData]);
-
   useEffect(() => {
     const getCourses = async () => {
       try {
@@ -109,7 +95,6 @@ const EducationEditModal: React.FC<EducationEditModalProps> = ({
     };
     getCourses();
   }, []);
-
   const fetchColleges = async (stateKey: string) => {
     try {
       const res = await fetchHelper(
@@ -121,15 +106,12 @@ const EducationEditModal: React.FC<EducationEditModalProps> = ({
       }
     } catch {}
   };
-
   const {isMissionPlan} = useUserSubscription(userData ?? undefined);
-
   useEffect(() => {
     const stateKey = initialValues.college_state || collegeStates[0].key;
     fetchColleges(stateKey);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen]);
-
   const handleSubmit = async (values: EducationValues) => {
     setLoading(true);
     try {
@@ -153,7 +135,6 @@ const EducationEditModal: React.FC<EducationEditModalProps> = ({
       ) {
         payload.current_year = values.current_year;
       }
-
       if (Object.keys(payload).length === 0) {
         showToast('success', 'No changes to save');
         onClose();
@@ -219,7 +200,6 @@ const EducationEditModal: React.FC<EducationEditModalProps> = ({
             name: stateObj?.name || merged.college_state,
           };
         }
-
         // Current Year
         if (payload.current_year) {
           const yearObj: CollegeYear | undefined = collegeYears.find(
@@ -238,11 +218,9 @@ const EducationEditModal: React.FC<EducationEditModalProps> = ({
             name: yearObj?.name || merged.current_year,
           };
         }
-
         // Convert back to IUserData format for Redux store
         dispatch(updateUserData(merged as IUserData));
         localStorage.setItem(USER_DATA_KEY, JSON.stringify(merged));
-
         showToast('success', 'Education details updated');
         onClose();
       } else {
@@ -252,12 +230,10 @@ const EducationEditModal: React.FC<EducationEditModalProps> = ({
       setLoading(false);
     }
   };
-
   const hasActiveSubscription = useMemo(() => {
     return hasAnyActiveSubscription(userData?.subscription_info ?? []);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userData?.subscription_info]);
-
   return (
     <Modal
       isOpen={isOpen}
@@ -306,7 +282,6 @@ const EducationEditModal: React.FC<EducationEditModalProps> = ({
                 </div>
               )}
             </div>
-
             {/* College State */}
             <div>
               <label className="block text-xs font-inter font-medium text-primary-dark mb-2">
@@ -333,20 +308,17 @@ const EducationEditModal: React.FC<EducationEditModalProps> = ({
                   height={24}
                 />
               </div>
-
               {touched.college_state && errors.college_state && (
                 <div className="text-red-500 text-sm mt-1">
                   {String(errors.college_state)}
                 </div>
               )}
             </div>
-
             {/* College */}
             <div className="relative">
               <label className="block text-xs font-inter font-medium text-primary-dark mb-2">
                 College <span className="text-red-500">*</span>
               </label>
-
               <div className="relative">
                 <Field
                   as="select"
@@ -361,7 +333,6 @@ const EducationEditModal: React.FC<EducationEditModalProps> = ({
                     </option>
                   ))}
                 </Field>
-
                 {/* Custom dropdown icon — absolutely positioned */}
                 <DropArrowDownIcon
                   className="absolute right-3 top-1/2 transform -translate-y-1/2 text-primary-dark pointer-events-none"
@@ -369,14 +340,12 @@ const EducationEditModal: React.FC<EducationEditModalProps> = ({
                   height={24}
                 />
               </div>
-
               {touched.college && errors.college && (
                 <div className="text-red-500 text-sm mt-1">
                   {String(errors.college)}
                 </div>
               )}
             </div>
-
             {/* Current Year */}
             <div>
               <label className="block text-xs font-inter font-medium text-primary-dark mb-2">
@@ -409,7 +378,6 @@ const EducationEditModal: React.FC<EducationEditModalProps> = ({
                 </div>
               )}
             </div>
-
             <div className="flex space-x-3 pt-6">
               <button
                 type="submit"
@@ -417,7 +385,6 @@ const EducationEditModal: React.FC<EducationEditModalProps> = ({
                 className="flex-1 bg-primary-blue text-white py-4 px-4 rounded-2xl  focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed font-medium">
                 {loading ? 'Saving...' : 'Save'}
               </button>
-
               <button
                 type="button"
                 onClick={onClose}
@@ -432,5 +399,4 @@ const EducationEditModal: React.FC<EducationEditModalProps> = ({
     </Modal>
   );
 };
-
 export default EducationEditModal;

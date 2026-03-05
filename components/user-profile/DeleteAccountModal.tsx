@@ -1,12 +1,9 @@
-'use client';
-
 import Modal from '@/common/Modal';
 import {BASE_URL, PROFILE_ROUTE} from '@/constants';
 import {CheckIcon, RemoveIcon} from '@/elements/Icons';
 import {IAccountDeletionModalProps} from '@/qbank/types';
 import {fetchHelper, showToast} from '@/utils/helpers';
 import React, {useCallback, useState} from 'react';
-
 const deleteAccountPoints: string[] = [
   "You'll be logged out of Cerebellum & your account will be deleted within 48 hours",
   'Your active subscription will be canceled.',
@@ -14,19 +11,15 @@ const deleteAccountPoints: string[] = [
   "You'll not be able to access your bookmarked content",
   "You'll not be able to sign in to your account. You'll have to create new account.",
 ];
-
 type Props = IAccountDeletionModalProps & {
   onProceed: () => void; // called when OTP is sent successfully
 };
-
 const DeleteAccountModal: React.FC<Props> = ({isOpen, onClose, onProceed}) => {
   const [loading, setLoading] = useState(false);
-
   const onDelete = useCallback(async () => {
     try {
       setLoading(true);
       const res = await fetchHelper(BASE_URL + PROFILE_ROUTE, 'DELETE');
-
       setLoading(false);
       showToast('success', res?.data.detail || 'OTP sent to your email');
       onProceed();
@@ -35,7 +28,6 @@ const DeleteAccountModal: React.FC<Props> = ({isOpen, onClose, onProceed}) => {
       showToast('error', e?.message || 'Failed to start deletion');
     }
   }, [onProceed]);
-
   return (
     <Modal
       isOpen={isOpen}
@@ -58,7 +50,6 @@ const DeleteAccountModal: React.FC<Props> = ({isOpen, onClose, onProceed}) => {
           sessions. Upon deletion, your account and related data will be
           permanently deleted.
         </p>
-
         <div className="border border-gray-200 rounded-xl p-4 mb-4">
           <div className="flex items-center justify-between mb-3">
             <h2 className="text-base font-openSauceOneMedium text-customGray-90">
@@ -81,7 +72,6 @@ const DeleteAccountModal: React.FC<Props> = ({isOpen, onClose, onProceed}) => {
             ))}
           </div>
         </div>
-
         <div className="bg-blue-50 border border-blue-200 p-4 rounded-xl text-sm font-openSauceOneMedium text-customGray-90">
           If you decide to use Cerebellum again, just download it from Google
           Play Store or App Store. Once downloaded, sign in/register with your
@@ -105,5 +95,4 @@ const DeleteAccountModal: React.FC<Props> = ({isOpen, onClose, onProceed}) => {
     </Modal>
   );
 };
-
 export default DeleteAccountModal;

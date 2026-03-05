@@ -1,5 +1,3 @@
-'use client';
-
 import LogoutModal from '@/common/LogoutModal';
 import {handleRateUs, WebSiteLink} from '@/constants';
 import {
@@ -26,7 +24,6 @@ import {useDispatch} from 'react-redux';
 import DeleteAccountModal from './DeleteAccountModal';
 import OtpVerifyModal from './OtpVerifyModal';
 import ResetDataModal from './ResetDataModal';
-
 const ProfileSettings: React.FC = () => {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -38,7 +35,6 @@ const ProfileSettings: React.FC = () => {
     useState<boolean>(false);
   const [isOtpOpen, setIsOtpOpen] = useState<boolean>(false);
   const [isResetOpen, setIsResetOpen] = useState<boolean>(false);
-
   const handleLogout = async () => {
     await handleAppLogout(
       setAuthToken,
@@ -48,11 +44,9 @@ const ProfileSettings: React.FC = () => {
       router,
     );
   };
-
   const handleDeleteClick = () => {
     setIsDeleteAccountModalVisible(true);
   };
-
   const settingsItems: MenuItem[] = [
     {
       icon: EducationDetailIcon,
@@ -65,7 +59,6 @@ const ProfileSettings: React.FC = () => {
       onClick: shareApp,
     },
   ];
-
   const cerebellumItems: MenuItem[] = [
     {
       icon: InfooIcon,
@@ -88,7 +81,6 @@ const ProfileSettings: React.FC = () => {
       onClick: handleRateUs,
     },
   ];
-
   const legalItems: MenuItem[] = [
     {
       icon: LegalPolicyIcon,
@@ -106,21 +98,18 @@ const ProfileSettings: React.FC = () => {
       onClick: () => window.open(WebSiteLink.cancellationPolicy, '_blank'),
     },
   ];
-
   const moreItems: MenuItem[] = [
     {
       icon: LogOutIcon,
       label: 'Log Out',
       onClick: () => setIsModalVisible(true),
     },
-
     {
       icon: ResetIcon,
       label: 'Reset Data',
       onClick: () => setIsResetOpen(true),
     },
   ];
-
   const renderSection = (title: string, items: MenuItem[], className = '') => (
     <div className={`space-y-2 md:space-y-3 font-sauce ${className}`}>
       <h2 className="text-base md:text-lg font-sauce font-bold text-lightBlue-900">
@@ -144,7 +133,6 @@ const ProfileSettings: React.FC = () => {
       </div>
     </div>
   );
-
   return (
     <div className="w-full space-y-4 md:space-y-6 font-sauce">
       {/* Logout Modal */}
@@ -153,7 +141,6 @@ const ProfileSettings: React.FC = () => {
         onClose={() => setIsModalVisible(false)}
         onConfirm={handleLogout}
       />
-
       <DeleteAccountModal
         isOpen={isDeleteAccountModalVisible}
         onClose={() => setIsDeleteAccountModalVisible(false)}
@@ -167,22 +154,17 @@ const ProfileSettings: React.FC = () => {
         onClose={() => setIsOtpOpen(false)}
         onReopen={() => setIsOtpOpen(true)}
       />
-
       {/* Reset Data Modal */}
       <ResetDataModal
         isOpen={isResetOpen}
         onClose={() => setIsResetOpen(false)}
       />
-
       {/* Settings Section */}
       {renderSection('Settings', settingsItems)}
-
       {/* Cerebellum Section */}
       {renderSection('Cerebellum', cerebellumItems)}
-
       {/* Legal Section */}
       {renderSection('Legal', legalItems)}
-
       {/* More Section */}
       <div className="space-y-2 md:space-y-3 font-sauce">
         <h2 className="text-base md:text-lg font-sauce font-bold text-lightBlue-900">
@@ -203,7 +185,6 @@ const ProfileSettings: React.FC = () => {
               <ChevronRightIcon className="w-4 h-4 md:w-5 md:h-5 text-gray-400 flex-shrink-0" />
             </button>
           ))}
-
           {/* Delete Account */}
           <div>
             <button
@@ -217,5 +198,4 @@ const ProfileSettings: React.FC = () => {
     </div>
   );
 };
-
 export default ProfileSettings;

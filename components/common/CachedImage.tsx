@@ -1,9 +1,6 @@
-'use client';
-
 import {getCachedImageUrl} from 'lib/indexedDB/imageCache';
 import Image from 'next/image';
 import {useEffect, useState} from 'react';
-
 interface CachedImageProps {
   src: string;
   alt: string;
@@ -15,7 +12,6 @@ interface CachedImageProps {
   /** Fallback image source if caching fails */
   fallbackSrc?: string;
 }
-
 /**
  * CachedImage Component
  *
@@ -37,22 +33,18 @@ const CachedImage = ({
   const [imageSrc, setImageSrc] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [useFallback, setUseFallback] = useState(false);
-
   useEffect(() => {
     let objectUrl: string | null = null;
     let isMounted = true;
-
     const loadImage = async () => {
       if (!src) {
         setIsLoading(false);
         setUseFallback(true);
         return;
       }
-
       try {
         // Try to get from cache or fetch and cache
         const cachedUrl = await getCachedImageUrl(src, cacheTTL);
-
         if (isMounted) {
           if (cachedUrl) {
             objectUrl = cachedUrl;
@@ -76,9 +68,7 @@ const CachedImage = ({
         }
       }
     };
-
     loadImage();
-
     // Cleanup: revoke object URL to free memory
     return () => {
       isMounted = false;
@@ -87,7 +77,6 @@ const CachedImage = ({
       }
     };
   }, [src, cacheTTL]);
-
   // Show placeholder while loading
   if (isLoading) {
     return (
@@ -97,7 +86,6 @@ const CachedImage = ({
       />
     );
   }
-
   // Show fallback image source if provided and no valid image
   if (!imageSrc && fallbackSrc) {
     return (
@@ -110,7 +98,6 @@ const CachedImage = ({
       />
     );
   }
-
   // Show placeholder if no image at all
   if (!imageSrc) {
     return (
@@ -121,7 +108,6 @@ const CachedImage = ({
       </div>
     );
   }
-
   // Use regular img tag for:
   // 1. Blob URLs from cache
   // 2. Fallback mode (CORS blocked URLs) - img tags bypass CORS
@@ -137,7 +123,6 @@ const CachedImage = ({
       />
     );
   }
-
   // Fallback to Next.js Image for other cases
   return (
     <Image
@@ -149,5 +134,4 @@ const CachedImage = ({
     />
   );
 };
-
 export default CachedImage;

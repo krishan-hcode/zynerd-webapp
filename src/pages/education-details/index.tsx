@@ -1,11 +1,8 @@
-'use client';
-
 import withAuth from '@/global/WithAuth';
 import Header from '@/qbank/QBankHeader';
 import EducationLeft from '@/user-profile/EducationLeft';
 import EducationRight from '@/user-profile/EducationRight';
 import type React from 'react';
-
 const EducationDetailsPage: React.FC = () => {
   return (
     <div className="flex flex-col h-screen">
@@ -25,5 +22,4 @@ const EducationDetailsPage: React.FC = () => {
     </div>
   );
 };
-
 export default withAuth(EducationDetailsPage);

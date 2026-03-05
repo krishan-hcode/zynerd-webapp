@@ -1,5 +1,3 @@
-'use client';
-
 import ConfirmationModal from '@/common/ConfirmationModal';
 import Modal from '@/common/Modal';
 import {BASE_URL, DELETE_ACCOUNT_ROUTE, PROFILE_ROUTE} from '@/constants';
@@ -10,13 +8,11 @@ import {TrashIcon} from '@heroicons/react/24/outline';
 import {useRouter} from 'next/router';
 import React, {useCallback, useContext, useEffect, useState} from 'react';
 import {useDispatch} from 'react-redux';
-
 type Props = {
   isOpen: boolean;
   onClose: () => void;
   onReopen?: () => void; // Callback to reopen the modal from parent
 };
-
 const OtpVerifyModal: React.FC<Props> = ({isOpen, onClose, onReopen}) => {
   const [otp, setOtp] = useState('');
   const [loading, setLoading] = useState(false);
@@ -26,7 +22,6 @@ const OtpVerifyModal: React.FC<Props> = ({isOpen, onClose, onReopen}) => {
   const dispatch = useDispatch();
   const router = useRouter();
   const {setAuthToken, setUserData, setUserRole} = useContext(UserContext);
-
   const onVerify = useCallback(async () => {
     if (otp.length !== 6) return;
     try {
@@ -38,7 +33,6 @@ const OtpVerifyModal: React.FC<Props> = ({isOpen, onClose, onReopen}) => {
       showToast('error', e?.message || 'Failed to verify OTP');
     }
   }, [otp, onClose]);
-
   const onResend = useCallback(async () => {
     try {
       if (timeRemain === 0) {
@@ -55,14 +49,12 @@ const OtpVerifyModal: React.FC<Props> = ({isOpen, onClose, onReopen}) => {
       showToast('error', e?.message || 'Failed to resend OTP');
     }
   }, [timeRemain]);
-
   const handleDeleteAccount = async () => {
     try {
       setLoading(true);
       const res = await fetchHelper(BASE_URL + DELETE_ACCOUNT_ROUTE, 'POST', {
         otp,
       });
-
       if (res?.status == 200) {
         // or whatever your API uses to indicate success
         showToast('success', 'Your account has been deleted successfully.');
@@ -78,7 +70,6 @@ const OtpVerifyModal: React.FC<Props> = ({isOpen, onClose, onReopen}) => {
         // If API says deletion failed (likely wrong OTP)
         const errorMessage = res?.message || 'Account deletion failed';
         console.log('errmsg', errorMessage.toLowerCase());
-
         // Check if it's an OTP-related error
         if (
           errorMessage.toLowerCase() ===
@@ -106,7 +97,6 @@ const OtpVerifyModal: React.FC<Props> = ({isOpen, onClose, onReopen}) => {
       setLoading(false);
     }
   };
-
   useEffect(() => {
     if (isOpen && timeRemain > 0) {
       const timer = setInterval(
@@ -116,7 +106,6 @@ const OtpVerifyModal: React.FC<Props> = ({isOpen, onClose, onReopen}) => {
       return () => clearInterval(timer);
     }
   }, [isOpen, timeRemain]);
-
   return (
     <>
       <Modal
@@ -165,7 +154,6 @@ const OtpVerifyModal: React.FC<Props> = ({isOpen, onClose, onReopen}) => {
               </button>
             )}
           </div>
-
           <div className="border-t border-gray-200 mt-4" />
           <div className="w-full px-0 py-4 flex gap-3">
             <button
@@ -182,7 +170,6 @@ const OtpVerifyModal: React.FC<Props> = ({isOpen, onClose, onReopen}) => {
           </div>
         </div>
       </Modal>
-
       <ConfirmationModal
         isModalOpen={confirmOpen}
         setIsModalOpen={setConfirmOpen}
@@ -198,5 +185,4 @@ const OtpVerifyModal: React.FC<Props> = ({isOpen, onClose, onReopen}) => {
     </>
   );
 };
-
 export default OtpVerifyModal;

@@ -1,11 +1,7 @@
-'use client';
-
 import {classNames} from '@/utils/utils';
 import {ArrowLeftIcon, BookmarkIcon} from '@heroicons/react/24/outline';
 import UserAvatar from '../common/UserAvatar';
-
 import {useRouter} from 'next/router';
-
 export default function Header({
   title,
   searchPlaceholder = 'Search',
@@ -22,7 +18,6 @@ export default function Header({
   const handleBookmarkClick = () => {
     onBookmarkClick ? onBookmarkClick() : router.push('/bookmark-collection');
   };
-
   return (
     <header
       className={classNames(
@@ -44,7 +39,6 @@ export default function Header({
               {isEditMode ? 'Edit Bookmarks' : title}
             </h1>
           </div>
-
           {/* Right Side Actions */}
           <div className="flex items-center space-x-4">
             {isEditMode ? (

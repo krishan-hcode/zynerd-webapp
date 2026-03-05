@@ -1,20 +1,15 @@
-'use client';
-
 import {PlaceholderUserIcon} from '@/elements/Icons';
 import {useAppSelector} from 'lib/redux/hooks/appHooks';
 import Image from 'next/image';
 import {useRouter} from 'next/navigation';
-
 const UserAvatar = () => {
   const router = useRouter();
   const userInfo = useAppSelector(state => state.user.userInfo);
-
   // Get the image URL from image_file property
   const imageUrl = userInfo?.image_file;
   const userName =
     `${userInfo?.first_name || ''} ${userInfo?.last_name || ''}`?.trim() ||
     'User';
-
   return (
     <div className="flex-shrink-0 cursor-pointer">
       {imageUrl ? (
@@ -41,5 +36,4 @@ const UserAvatar = () => {
     </div>
   );
 };
-
 export default UserAvatar;

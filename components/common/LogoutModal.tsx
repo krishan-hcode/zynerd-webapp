@@ -1,9 +1,6 @@
-'use client';
-
 import {LogOutIcon} from '@/elements/Icons';
 import type React from 'react';
 import Modal from './Modal';
-
 const LogoutModal: React.FC<any> = ({isOpen, onClose, onConfirm}) => {
   return (
     <Modal
@@ -15,12 +12,10 @@ const LogoutModal: React.FC<any> = ({isOpen, onClose, onConfirm}) => {
         <span className="mb-4 inline-flex justify-center items-center w-[62px] h-[62px] rounded-full border-8 border-slate-100 border-opacity-10 bg-slate-200">
           <LogOutIcon />
         </span>
-
         <h3 className="mb-2 text-2xl font-bold text-gray-800">Log Out</h3>
         <p className="text-gray-500">
           Are you sure you would like to log out of your account?
         </p>
-
         <div className="mt-6 flex justify-center gap-x-4">
           <button
             onClick={onConfirm}
@@ -38,5 +33,4 @@ const LogoutModal: React.FC<any> = ({isOpen, onClose, onConfirm}) => {
     </Modal>
   );
 };
-
 export default LogoutModal;

@@ -1,10 +1,7 @@
-'use client';
-
 import Header from '@/qbank/QBankHeader';
 import FaqLeft from '@/user-profile/FaqLeft';
 import FaqRight from '@/user-profile/FaqRight';
 import Head from 'next/head';
-
 const FAQsPage: React.FC = () => {
   return (
     <div className="flex flex-col h-screen bg-[#f3f8ff]">
@@ -25,5 +22,4 @@ const FAQsPage: React.FC = () => {
     </div>
   );
 };
-
 export default FAQsPage;

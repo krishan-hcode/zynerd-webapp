@@ -1,14 +1,10 @@
-'use client';
-
 import {classNames} from '@/utils/utils';
 import {
   ChevronDownIcon,
   MagnifyingGlassIcon,
 } from '@heroicons/react/24/outline';
 import {useState} from 'react';
-
 import type {ICounsellingSearchProps} from '@/types/counsellings.types';
-
 const CounsellingSearch = ({
   searchQuery,
   onSearchChange,
@@ -21,7 +17,6 @@ const CounsellingSearch = ({
 }: ICounsellingSearchProps) => {
   const [showTypeDropdown, setShowTypeDropdown] = useState(false);
   const [showStateDropdown, setShowStateDropdown] = useState(false);
-
   return (
     <div className="w-full flex flex-col items-center px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-4 sm:space-y-6">
       {/* Search Bar */}
@@ -35,7 +30,6 @@ const CounsellingSearch = ({
           className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white border border-customGray-10 text-primary-dark font-inter text-sm placeholder:text-customGray-50 focus:outline-none focus:ring-2 focus:ring-primary-blue/20 focus:border-primary-blue shadow-sm"
         />
       </div>
-
       {/* Dropdowns */}
       <div className="flex flex-col sm:flex-row gap-3 w-full justify-center">
         {/* Counselling Type */}
@@ -91,7 +85,6 @@ const CounsellingSearch = ({
             </>
           )}
         </div>
-
         {/* State / Authority */}
         <div className="relative flex-1 group">
           <button
@@ -149,5 +142,4 @@ const CounsellingSearch = ({
     </div>
   );
 };
-
 export default CounsellingSearch;
