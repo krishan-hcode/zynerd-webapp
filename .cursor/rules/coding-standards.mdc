@@ -1,0 +1,17 @@
+---
+description: General coding conventions and TypeScript standards
+globs: src/**/*.ts, src/**/*.tsx, components/**/*.tsx
+---
+
+# Coding Standards
+- **Naming**:
+  - Variables/Functions: `camelCase`
+  - Components/Types/Interfaces: `PascalCase`
+  - Constants: `UPPER_SNAKE_CASE`
+- **TypeScript**:
+  - Maintain `strict: true` standards.
+  - Avoid `any` where possible; match existing file strictness.
+- **Flow**:
+  - Prefer early returns in functions.
+  - Use `try/catch` for async operations with `react-hot-toast` for feedback.
+- **AI Planning**: For changes touching 3+ files, always present a plan first.

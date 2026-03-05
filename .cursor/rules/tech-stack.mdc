@@ -1,0 +1,12 @@
+---
+description: Core tech stack and project identity for zynerd-webapp
+alwaysApply: true
+---
+
+# Project Overview
+- **Name**: zynerd-webapp (Cerebellum Academy)
+- **Purpose**: Medical Exam Counselling Application.
+- **Framework**: Next.js 16 (Pages Router).
+- **Primary Language**: TypeScript.
+- **Styling**: Tailwind CSS.
+- **State Management**: Redux Toolkit ,local storage and indexedDB.

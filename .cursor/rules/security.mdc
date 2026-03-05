@@ -1,0 +1,13 @@
+---
+description: Security guidelines and protected files information
+alwaysApply: true
+---
+
+# Security & Protected Areas
+- **NEVER** modify or read: `.env`, `.env.*`, `config/secrets.*`, `*.pem`, `*.key`.
+- **Auth Modules** are Read-Only (ask before refactoring):
+  - `components/global/WithAuth.tsx`
+  - `src/utils/api/authInterceptor.ts`
+  - `src/utils/api/axios.ts`
+- **CI/CD**: Never modify `.github/workflows/**`.
+- **Package Manager**: Treat `yarn.lock` as read-only unless adding dependencies.

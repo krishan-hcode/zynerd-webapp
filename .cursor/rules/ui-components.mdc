@@ -1,0 +1,13 @@
+---
+description: Rules for React components and UI development
+globs: components/**/*.tsx, src/pages/**/*.tsx
+---
+
+# UI & Component Standards
+- **Interactivity**: Project uses Pages Router; `'use client'` is NOT required.
+- **Styling**: 
+  - Use **Tailwind CSS**.
+  - Use the `classNames()` utility from `@/utils/utils` for conditional classes.
+- **Components**: Functional components with hooks only.
+- **Imports**: Always prefer `@/*` path aliases.
+- **Icons**: Use `@heroicons/react/24/outline`.
