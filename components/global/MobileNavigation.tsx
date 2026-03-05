@@ -8,7 +8,11 @@ import {
 import {copyText, handleAppLogout} from '@/utils/helpers';
 import {navbarLinks} from '@/utils/utils';
 import {Dialog, Transition} from '@headlessui/react';
-import {Bars3Icon} from '@heroicons/react/24/outline';
+import {
+  Bars3Icon,
+  ChevronDownIcon,
+  ChevronUpIcon,
+} from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import {useRouter} from 'next/router';
 import {Fragment, useContext, useState} from 'react';
@@ -25,6 +29,24 @@ import {
 
 export default function MobileNavigation({userRole = ''}: {userRole: string}) {
   const [open, setOpen] = useState(false);
+  const [expandedMenuIds, setExpandedMenuIds] = useState<Set<number>>(
+    new Set(),
+  );
+
+  const toggleSubMenu = (menuId: number) => {
+    setExpandedMenuIds(prev => {
+      const next = new Set(prev);
+      if (next.has(menuId)) {
+        next.delete(menuId);
+      } else {
+        next.add(menuId);
+      }
+      return next;
+    });
+  };
+
+  const isSubMenuItemActive = (menuItem: INavbarLink) =>
+    menuItem.items?.some(sub => asPath.startsWith(sub.url));
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [isCopied, setIsCopied] = useState<boolean>(false);
   const {setAuthToken, userData, setUserData, setUserRole} =
@@ -63,19 +85,29 @@ export default function MobileNavigation({userRole = ''}: {userRole: string}) {
   const getMenuItemClasses = (
     url: string[] | undefined,
     menuItemUrl: string,
+    isParentActive?: boolean,
   ): string => {
-    return url?.length && `/${url[1]}` === menuItemUrl
+    const isActive =
+      (url?.length && `/${url[1]}` === menuItemUrl) || isParentActive;
+    return isActive
       ? 'w-full px-2 bg-primaryBlue/5 rounded-md text-primaryBlue py-1.5 flex items-center relative after:absolute after:right-2 after:top-1/2 after:w-1 after:h-8 after:bg-primaryBlue after:rounded-r-md after:-translate-y-1/2'
       : 'w-full px-2 text-gray-90 py-1.5 hover:bg-gray-200 rounded-md flex items-center font-medium';
+  };
+
+  const getSubMenuItemClasses = (subItemUrl: string): string => {
+    return asPath.startsWith(subItemUrl)
+      ? 'w-full pl-8 pr-2 py-2 bg-primaryBlue/5 rounded-md text-primaryBlue flex items-center text-sm font-medium'
+      : 'w-full pl-8 pr-2 py-2 text-gray-90 hover:bg-gray-100 rounded-md flex items-center text-sm font-medium';
   };
 
   const getMenuTextClasses = (
     url: string[] | undefined,
     menuItemUrl: string,
+    isParentActive?: boolean,
   ): string => {
-    return url?.length && `/${url[1]}` === menuItemUrl
-      ? 'px-2 text-primaryBlue'
-      : 'px-2 text-gray-90';
+    const isActive =
+      (url?.length && `/${url[1]}` === menuItemUrl) || isParentActive;
+    return isActive ? 'px-2 text-primaryBlue' : 'px-2 text-gray-90';
   };
 
   const getIconForMenuItem = (menuItem: INavbarLink, isActive: boolean) => {
@@ -87,6 +119,7 @@ export default function MobileNavigation({userRole = ''}: {userRole: string}) {
         return <HomeFillIcon className="w-5 h-5" />;
       case '/videos':
         return <VideoFilledIcon className="w-5 h-5" />;
+      case '/insights':
       case '/qbank':
         return <QbankFilledIcon className="w-5 h-5" />;
       case '/live':
@@ -178,9 +211,84 @@ export default function MobileNavigation({userRole = ''}: {userRole: string}) {
                           <ul className="flex flex-col space-y-2 ml-6 text-lg">
                             {navbarLinks(userRole)?.map(
                               (menuItem: INavbarLink) => {
+                                const hasSubItems =
+                                  menuItem.items && menuItem.items.length > 0;
+                                const isExpanded =
+                                  expandedMenuIds.has(menuItem.id);
                                 const isActive = Boolean(
-                                  url?.length && `/${url[1]}` === menuItem.url,
+                                  url?.length &&
+                                    `/${url[1]}` === menuItem.url,
                                 );
+                                const isParentActive =
+                                  hasSubItems &&
+                                  isSubMenuItemActive(menuItem);
+
+                                if (hasSubItems) {
+                                  return (
+                                    <li key={menuItem.id} className="space-y-1">
+                                      <div
+                                        role="button"
+                                        tabIndex={0}
+                                        className={`cursor-pointer ${getMenuItemClasses(
+                                          url,
+                                          menuItem.url,
+                                          isParentActive,
+                                        )}`}
+                                        onClick={() =>
+                                          toggleSubMenu(menuItem.id)
+                                        }
+                                        onKeyDown={e =>
+                                          e.key === 'Enter' &&
+                                          toggleSubMenu(menuItem.id)
+                                        }>
+                                        <div className="mr-2">
+                                          {getIconForMenuItem(
+                                            menuItem,
+                                            isActive || isParentActive,
+                                          )}
+                                        </div>
+                                        <span
+                                          className={getMenuTextClasses(
+                                            url,
+                                            menuItem.url,
+                                            isParentActive,
+                                          )}>
+                                          {menuItem.title}
+                                        </span>
+                                        <span className="ml-auto">
+                                          {isExpanded ? (
+                                            <ChevronUpIcon className="w-4 h-4" />
+                                          ) : (
+                                            <ChevronDownIcon className="w-4 h-4" />
+                                          )}
+                                        </span>
+                                      </div>
+                                      {isExpanded && (
+                                        <ul className="mt-1 space-y-0.5">
+                                          {menuItem.items?.map(subItem => (
+                                            <li key={subItem.id}>
+                                              <Link
+                                                href={subItem.url}
+                                                className={getSubMenuItemClasses(
+                                                  subItem.url,
+                                                )}
+                                                onClick={() =>
+                                                  handleRouteChange(
+                                                    subItem.url,
+                                                  )
+                                                }>
+                                                <span className="mr-2">
+                                                  {subItem.icon}
+                                                </span>
+                                                {subItem.title}
+                                              </Link>
+                                            </li>
+                                          ))}
+                                        </ul>
+                                      )}
+                                    </li>
+                                  );
+                                }
 
                                 return (
                                   <Link

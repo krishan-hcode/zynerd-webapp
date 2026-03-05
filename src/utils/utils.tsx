@@ -6,7 +6,17 @@ import {
   TestsIcon,
 } from '@/elements/Icons';
 import {
+  AcademicCapIcon,
+  BanknotesIcon,
+  BookOpenIcon,
+  BuildingLibraryIcon,
+  BuildingOffice2Icon,
   ClipboardDocumentCheckIcon,
+  LinkIcon,
+  MagnifyingGlassCircleIcon,
+  MapPinIcon,
+  Squares2X2Icon,
+  TrophyIcon,
   UserCircleIcon,
 } from '@heroicons/react/24/outline';
 import dayjs from 'dayjs';
@@ -117,14 +127,58 @@ export const navbarLinks = (userRole: string) => {
       id: 81,
       title: 'Insights',
       url: '/insights',
-      items: [],
+      items: [
+        {
+          id: 811,
+          title: 'Allotments',
+          url: '/insights/allotments',
+          items: [],
+          icon: <LinkIcon className="w-4" />,
+        },
+        {
+          id: 812,
+          title: 'Closing Ranks',
+          url: '/insights/closing-ranks',
+          items: [],
+          icon: <TrophyIcon className="w-4" />,
+        },
+        {
+          id: 813,
+          title: 'Seat Matrix',
+          url: '/insights/seat-matrix',
+          items: [],
+          icon: <Squares2X2Icon className="w-4" />,
+        },
+        {
+          id: 814,
+          title: 'Fee, Stipend and Bond',
+          url: '/insights/fee-stipend-bond',
+          items: [],
+          icon: <BanknotesIcon className="w-4" />,
+        },
+      ],
       icon: <QbankIcon className="w-5" />,
     },
     {
       id: 82,
       title: 'Tools',
       url: '/tools',
-      items: [],
+      items: [
+        {
+          id: 821,
+          title: 'Allotment Mapping',
+          url: '/tools/allotment-mapping',
+          items: [],
+          icon: <MapPinIcon className="w-4" />,
+        },
+        {
+          id: 822,
+          title: 'Rank Scan',
+          url: '/tools/rank-scan',
+          items: [],
+          icon: <MagnifyingGlassCircleIcon className="w-4" />,
+        },
+      ],
       icon: <LiveIcon className="w-5" />,
     },
     {
@@ -145,7 +199,36 @@ export const navbarLinks = (userRole: string) => {
       id: 16,
       title: 'Explore',
       url: '/explore',
-      items: [],
+      items: [
+        {
+          id: 161,
+          title: 'Institutes',
+          url: '/explore/institutes',
+          items: [],
+          icon: <BuildingOffice2Icon className="w-4" />,
+        },
+        {
+          id: 162,
+          title: 'Universities',
+          url: '/explore/universities',
+          items: [],
+          icon: <BuildingLibraryIcon className="w-4" />,
+        },
+        {
+          id: 163,
+          title: 'Counsellings',
+          url: '/explore/counsellings',
+          items: [],
+          icon: <AcademicCapIcon className="w-4" />,
+        },
+        {
+          id: 164,
+          title: 'Courses',
+          url: '/explore/courses',
+          items: [],
+          icon: <BookOpenIcon className="w-4" />,
+        },
+      ],
       icon: <PlanExtensionIcon />,
     },
     {
