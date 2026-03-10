@@ -69,6 +69,7 @@ function Modal({
   modalPositionClass = '',
   zIndex = 'z-[100]',
   isInFullscreen = false,
+  backdropBlur = false,
 }: {
   children: React.ReactNode;
   onClose?: () => void;
@@ -80,7 +81,11 @@ function Modal({
   zIndex?: string;
   isInFullscreen?: boolean;
   buttonAdditionalClass?: string;
+  backdropBlur?: boolean;
 }) {
+  const backdropClasses = backdropBlur
+    ? 'bg-black/50 backdrop-blur-sm'
+    : 'bg-black bg-opacity-75';
   const dialogRef = useRef<HTMLButtonElement>(null);
   const [isInFullscreenMode, setIsInFullscreenMode] = useState(false);
 
@@ -107,7 +112,9 @@ function Modal({
         <div
           className={`fixed inset-0 ${zIndex} flex items-center justify-center`}>
           <Transition.Child as={Fragment} {...backdropTransition}>
-            <div className="absolute inset-0 bg-black bg-opacity-75 transition-opacity" />
+            <div
+              className={`absolute inset-0 ${backdropClasses} transition-opacity`}
+            />
           </Transition.Child>
 
           <Transition.Child as={Fragment} {...modalTransition}>
@@ -137,14 +144,16 @@ function Modal({
         className={`relative ${zIndex}`}
         onClose={onClose}>
         <Transition.Child as={Fragment} {...backdropTransition}>
-          <div className="fixed inset-0 bg-black bg-opacity-75 transition-opacity" />
+          <div
+            className={`fixed inset-0 ${backdropClasses} transition-opacity`}
+          />
         </Transition.Child>
 
         <div
-          className={`fixed inset-0 z-10 overflow-y-auto pt-24 ${modalClasses}`}>
+          className={`fixed inset-0 z-10 flex min-h-screen items-center justify-center overflow-hidden p-4 sm:p-6 ${modalClasses}`}>
           <div
             className={classNames(
-              'flex sm:min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0 ',
+              'flex min-h-0 w-full max-w-full flex-1 items-center justify-center',
               modalPositionClass,
             )}>
             <Transition.Child as={Fragment} {...modalTransition}>
