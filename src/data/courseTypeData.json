@@ -1,0 +1,8 @@
+{
+  "options": [
+    "Clinical",
+    "Non-Clinical",
+    "Para-Clinical",
+    "Pre-Clinical"
+  ]
+}

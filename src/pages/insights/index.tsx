@@ -15,7 +15,7 @@ const InsightsPage = () => {
         showSearch={true}
         showBookmark={true}
       />
-      <div className="bg-lightBlue-300 min-h-[calc(100vh-77px)]">
+      <div className="min-h-[calc(100vh-77px)]">
         <ComingSoon title="Insights" />
       </div>
     </>
