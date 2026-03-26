@@ -23,16 +23,16 @@ export default function ToggleButtonGroup<T>({
     const next = isSelected
       ? value.filter(v => getKey(v) !== key)
       : [...value, option].sort((a, b) => {
-          const idxA = options.findIndex(o => getKey(o) === getKey(a));
-          const idxB = options.findIndex(o => getKey(o) === getKey(b));
-          return idxA - idxB;
-        });
+        const idxA = options.findIndex(o => getKey(o) === getKey(a));
+        const idxB = options.findIndex(o => getKey(o) === getKey(b));
+        return idxA - idxB;
+      });
     onChange(next);
   };
 
   return (
     <div>
-      <label className="block text-xs font-medium text-primary-dark font-inter mb-2">
+      <label className="block text-xs font-medium text-primary-blue font-inter mb-2">
         {label}
       </label>
       <div className="flex gap-2 flex-wrap">
@@ -45,7 +45,7 @@ export default function ToggleButtonGroup<T>({
               type="button"
               onClick={() => toggle(option)}
               className={classNames(
-                'w-10 h-10 rounded-lg border text-sm font-inter font-medium transition-colors',
+                'w-10 h-10 rounded-lg border text-xs font-inter font-medium transition-colors',
                 isSelected
                   ? 'border-primary-blue bg-primary-blue text-white'
                   : 'border-customGray-10 hover:bg-customGray-5',

@@ -60,7 +60,7 @@ export default function MultiSelectDropdown({
 
   return (
     <div ref={containerRef} className="relative">
-      <label className="block text-xs font-medium text-primary-dark font-inter mb-1">
+      <label className="block text-xs font-medium text-primary-blue font-inter mb-1">
         {label}
       </label>
       <button
@@ -76,7 +76,7 @@ export default function MultiSelectDropdown({
         aria-haspopup="listbox"
         aria-label={label}
       >
-        <span className={classNames('truncate', value.length > 0 ? 'text-primary-blue' : '')}>
+        <span className={classNames('truncate text-xs font-inter', value.length > 0 ? 'text-primary-blue' : '')}>
           {displayText}
         </span>
         <div className="flex items-center gap-1 flex-shrink-0">
@@ -144,7 +144,7 @@ export default function MultiSelectDropdown({
                     >
                       {selected ? <CheckIcon className="h-3 w-3" /> : null}
                     </span>
-                    <span className="truncate">{option}</span>
+                    <span className="truncate text-xs font-inter">{option}</span>
                   </button>
                 );
               })

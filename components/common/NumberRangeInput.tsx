@@ -30,7 +30,7 @@ export default function NumberRangeInput({
 
   return (
     <div>
-      <label className="block text-xs font-medium text-primary-dark font-inter mb-1">
+      <label className="block text-xs font-medium text-primary-blue font-inter mb-1">
         {label}
       </label>
       <div className="flex items-center gap-2">
@@ -40,7 +40,7 @@ export default function NumberRangeInput({
           value={minValue === '' ? '' : minValue}
           onChange={handleMinChange}
           placeholder={minPlaceholder}
-          className="w-full px-3 py-2 rounded-lg border border-customGray-10 text-sm font-inter"
+          className="w-full px-3 py-2 rounded-lg border border-customGray-10 text-xs font-inter"
         />
         <span className="text-customGray-50">-</span>
         <input
@@ -49,7 +49,7 @@ export default function NumberRangeInput({
           value={maxValue === '' ? '' : maxValue}
           onChange={handleMaxChange}
           placeholder={maxPlaceholder}
-          className="w-full px-3 py-2 rounded-lg border border-customGray-10 text-sm font-inter"
+          className="w-full px-3 py-2 rounded-lg border border-customGray-10 text-xs font-inter"
         />
       </div>
     </div>

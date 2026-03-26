@@ -119,7 +119,7 @@ function Modal({
 
           <Transition.Child as={Fragment} {...modalTransition}>
             <div
-              className={`relative transform overflow-hidden bg-white rounded-lg px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 w-full sm:p-6 ${containerAdditionalClasses}`}>
+              className={`relative transform overflow-y-auto overflow-x-hidden max-h-[90vh] bg-white rounded-lg px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-0 w-full sm:p-6 ${containerAdditionalClasses}`}>
               {shouldHaveCrossIcon && (
                 <CloseButton
                   onClose={onClose}
@@ -158,7 +158,7 @@ function Modal({
             )}>
             <Transition.Child as={Fragment} {...modalTransition}>
               <Dialog.Panel
-                className={`relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 w-full sm:p-6 ${containerAdditionalClasses}`}>
+                className={`relative transform overflow-y-auto overflow-x-hidden max-h-[90vh] rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-0 w-full sm:p-6 ${containerAdditionalClasses}`}>
                 {shouldHaveCrossIcon && (
                   <CloseButton
                     onClose={onClose}

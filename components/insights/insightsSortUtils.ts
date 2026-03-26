@@ -19,6 +19,15 @@ function compareStr(a: string, b: string): number {
   return (a ?? '').localeCompare(b ?? '', undefined, { sensitivity: 'base' });
 }
 
+function toComparableNumber(value: unknown): number {
+  if (typeof value === 'number') return value;
+  if (typeof value === 'string') {
+    const numeric = value.replace(/[^\d]/g, '');
+    return numeric ? parseInt(numeric, 10) : -Infinity;
+  }
+  return -Infinity;
+}
+
 export function sortInsightRecords(
   records: IInsightRecord[],
   sortBy: SortByOption,
@@ -35,11 +44,11 @@ export function sortInsightRecords(
       case 'round':
         result = a.round - b.round;
         break;
-      case 'stateRank':
-        result = compareNum(a.stateRank, b.stateRank);
-        break;
       case 'aiRank':
         result = compareNum(a.aiRank, b.aiRank);
+        break;
+      case 'stateRank':
+        result = compareNum(a.stateRank, b.stateRank);
         break;
       case 'state':
         result = compareStr(a.state, b.state);
@@ -49,6 +58,9 @@ export function sortInsightRecords(
         break;
       case 'course':
         result = compareStr(a.course, b.course);
+        break;
+      case 'seats':
+        result = (a.seats ?? -Infinity) - (b.seats ?? -Infinity);
         break;
       case 'quota':
         result = compareStr(a.quota, b.quota);
@@ -75,7 +87,11 @@ export function sortInsightRecords(
         result = parseCurrency(a.stipendYear1) - parseCurrency(b.stipendYear1);
         break;
       default:
-        result = 0;
+        if (/^cr_\d{4}_\d+$/.test(sortBy)) {
+          result = toComparableNumber(a[sortBy]) - toComparableNumber(b[sortBy]);
+        } else {
+          result = 0;
+        }
     }
     return result * multiplier;
   });
