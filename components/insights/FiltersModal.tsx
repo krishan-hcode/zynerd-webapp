@@ -4,10 +4,11 @@ import MultiSelectDropdown from '@/common/MultiSelectDropdown';
 import NumberRangeInput from '@/common/NumberRangeInput';
 import RadioGroup from '@/common/RadioGroup';
 import ToggleButtonGroup from '@/common/ToggleButtonGroup';
+import { usePremiumStatus } from '@/hooks/usePremiumStatus';
 import {
-  DEFAULT_DISPLAYED_FIELDS,
   DEFAULT_FILTERS,
   DISPLAYED_FIELD_LABELS,
+  getDynamicCrLabel,
   SESSION_OPTIONS,
   SESSION_ROUNDS,
   type DisplayedFieldKey,
@@ -23,6 +24,7 @@ interface FiltersModalProps {
   filters: InsightFilters;
   onFiltersChange: (f: InsightFilters) => void;
   displayedFields: DisplayedFields;
+  allowedFieldKeys: DisplayedFieldKey[];
   onDisplayedFieldsChange: (d: DisplayedFields) => void;
   onViewResults: () => void;
   quotaOptions?: string[];
@@ -40,6 +42,7 @@ export default function FiltersModal({
   filters,
   onFiltersChange,
   displayedFields,
+  allowedFieldKeys,
   onDisplayedFieldsChange,
   onViewResults,
   quotaOptions = [],
@@ -61,13 +64,22 @@ export default function FiltersModal({
   };
 
   const roundsForSession = SESSION_ROUNDS[filters.session];
+  const { isPremiumPurchased } = usePremiumStatus()
 
   const handleClearFilters = () => {
     onFiltersChange({ ...DEFAULT_FILTERS });
-    onDisplayedFieldsChange({ ...DEFAULT_DISPLAYED_FIELDS });
+    onDisplayedFieldsChange(
+      allowedFieldKeys.reduce(
+        (acc, key) => {
+          acc[key] = true;
+          return acc;
+        },
+        {} as DisplayedFields,
+      ),
+    );
   };
 
-  const displayFieldKeys = Object.keys(DEFAULT_DISPLAYED_FIELDS) as DisplayedFieldKey[];
+  const displayFieldKeys = allowedFieldKeys;
 
   return (
     <Modal
@@ -95,7 +107,7 @@ export default function FiltersModal({
       <div className="min-h-0 flex-1 overflow-y-auto px-4 py-4 sm:px-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 ">
           {/* Column 1 */}
-          <div className="space-y-4 border border-customGray-10 p-4 rounded-lg shadow-md">
+          <div className="space-y-4 border border-primary-blue/10 shadow-primary-blue/10 p-4 rounded-lg shadow-md">
             <NumberRangeInput
               label="AI Rank"
               minValue={filters.aiRankMin}
@@ -142,7 +154,7 @@ export default function FiltersModal({
           </div>
 
           {/* Column 2 */}
-          <div className="space-y-4 border border-customGray-10 p-4 rounded-lg shadow-md">
+          <div className="space-y-4 border border-primary-blue/10 shadow-primary-blue/10 p-4 rounded-lg shadow-md">
             <MultiSelectDropdown
               label="State"
               placeholder="Search State"
@@ -201,10 +213,20 @@ export default function FiltersModal({
               onMaxChange={bondPenaltyMax => updateFilters({ bondPenaltyMax })}
               maxPlaceholder="10000000"
             />
+            {allowedFieldKeys.includes('seats') && (
+              <NumberRangeInput
+                label="Seats"
+                minValue={filters.seatsMin}
+                maxValue={filters.seatsMax}
+                onMinChange={seatsMin => updateFilters({ seatsMin })}
+                onMaxChange={seatsMax => updateFilters({ seatsMax })}
+                maxPlaceholder="10000"
+              />
+            )}
           </div>
 
           {/* Column 3 */}
-          <div className="space-y-4 border border-customGray-10 p-4 rounded-lg shadow-md">
+          <div className="space-y-4 border border-primary-blue/10 shadow-primary-blue/10 p-4 rounded-lg shadow-md">
             {courseOptions.length > 5 ? (
               <MultiSelectDropdown
                 label="Course"
@@ -284,28 +306,30 @@ export default function FiltersModal({
               ))}
           </div>
         </div>
-        <hr className="my-6 border-customGray-10" />
+        <hr className="my-6 border-primary-blue/10" />
 
         {/* Displayed Fields */}
-        <div className="mt-6 pt-4 border border-customGray-10 p-4 rounded-lg shadow-md">
-          <h3 className="text-sm font-semibold text-primary-dark font-inter mb-3">
+        <div className="mt-6 pt-4 border border-primary-blue/10 shadow-primary-blue/10 p-4 rounded-lg shadow-md">
+          <h3 className="text-sm font-semibold text-primary-blue font-inter mb-3">
             Displayed Fields
           </h3>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
             {displayFieldKeys.map(key => (
               <label
                 key={key}
-                className="flex items-center gap-2 cursor-pointer text-sm font-inter"
+                className="flex items-center gap-2 cursor-pointer text-xs text-customGray-90 font-inter"
               >
                 <input
                   type="checkbox"
-                  checked={displayedFields[key]}
+                  checked={displayedFields[key] ?? true}
                   onChange={e =>
                     onDisplayedFieldsChange({ ...displayedFields, [key]: e.target.checked })
                   }
                   className="rounded border-customGray-10"
                 />
-                {DISPLAYED_FIELD_LABELS[key]}
+                {key in DISPLAYED_FIELD_LABELS
+                  ? DISPLAYED_FIELD_LABELS[key as keyof typeof DISPLAYED_FIELD_LABELS]
+                  : getDynamicCrLabel(key)}
               </label>
             ))}
           </div>
@@ -322,19 +346,22 @@ export default function FiltersModal({
           Clear Filters
         </button>
         <div className="flex items-center gap-3">
-          <select
+          {/* <select
             className="rounded-lg border border-customGray-10 bg-white px-3 py-2 text-sm font-inter"
             defaultValue=""
             aria-label="Select filter"
           >
             <option value="">Select filter</option>
-          </select>
+          </select> */}
           <button
             type="button"
+            disabled={!isPremiumPurchased}
             onClick={onViewResults}
             className="inline-flex items-center gap-2 rounded-lg bg-primary-blue px-5 py-2.5 font-inter text-sm font-medium text-white transition-opacity hover:opacity-90"
           >
-            <LockClosedIcon className="h-4 w-4" aria-hidden />
+            {!isPremiumPurchased && (
+              <LockClosedIcon className="h-4 w-4" aria-hidden />
+            )}
             View Results
           </button>
         </div>

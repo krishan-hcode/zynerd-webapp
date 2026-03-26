@@ -88,6 +88,12 @@ export function applyInsightFilters(
       if (penaltyMax != null && bondPenaltyNum > penaltyMax) return false;
     }
 
+    const seatsMin = toNum(filters.seatsMin);
+    const seatsMax = toNum(filters.seatsMax);
+    const seats = record.seats ?? null;
+    if (seatsMin != null && (seats == null || seats < seatsMin)) return false;
+    if (seatsMax != null && (seats == null || seats > seatsMax)) return false;
+
     if (filters.course.length > 0) {
       const recordCourseNorm = record.course?.trim().toUpperCase() ?? '';
       const selectedNorm = filters.course.map(c => c.trim().toUpperCase());

@@ -26,7 +26,7 @@ export default function RadioGroup<T extends string>({
 
   return (
     <div>
-      <label className="block text-xs font-medium text-primary-dark font-inter mb-2">
+      <label className="block text-xs font-medium text-primary-blue font-inter mb-2">
         {label}
       </label>
       <div className="flex gap-2 flex-wrap">
@@ -34,7 +34,7 @@ export default function RadioGroup<T extends string>({
           <label
             key={optValue}
             className={classNames(
-              'flex items-center gap-2 px-3 py-2 rounded-lg border cursor-pointer text-sm font-inter',
+              'flex items-center gap-2 px-3 py-2 rounded-lg border cursor-pointer text-xs font-inter',
               value === optValue
                 ? 'border-primary-blue bg-primary-blue/10 text-primary-blue'
                 : 'border-customGray-10 hover:bg-customGray-5',
@@ -46,7 +46,7 @@ export default function RadioGroup<T extends string>({
               value={optValue}
               checked={value === optValue}
               onChange={() => onChange(optValue)}
-              className="sr-only"
+              className="sr-only text-xs"
             />
             {optLabel ?? optValue}
           </label>

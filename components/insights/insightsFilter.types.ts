@@ -30,6 +30,8 @@ export interface InsightFilters {
   bondYearsMax: number | '';
   bondPenaltyMin: number | '';
   bondPenaltyMax: number | '';
+  seatsMin: number | '';
+  seatsMax: number | '';
   course: string[];
   courseType: string[];
   degree: string[];
@@ -55,89 +57,142 @@ export const DEFAULT_FILTERS: InsightFilters = {
   bondYearsMax: '',
   bondPenaltyMin: '',
   bondPenaltyMax: '',
+  seatsMin: '',
+  seatsMax: '',
   course: [],
   courseType: [],
   degree: [],
 };
 
-export type DisplayedFieldKey =
+export type DynamicCrFieldKey = `cr_${number}_${number}`;
+
+export type BaseDisplayedFieldKey =
   | 'round'
   | 'stateRank'
   | 'aiRank'
+  | 'quota'
+  | 'category'
   | 'state'
   | 'institute'
   | 'course'
-  | 'quota'
-  | 'category'
+  | 'seats'
   | 'fee'
-  | 'beds'
+  | 'stipendYear1'
   | 'bondYears'
   | 'bondPenalty'
-  | 'stipendYear1';
+  | 'beds';
 
-export type DisplayedFields = Record<DisplayedFieldKey, boolean>;
+export type DisplayedFieldKey = BaseDisplayedFieldKey | DynamicCrFieldKey;
 
-export const DISPLAYED_FIELD_LABELS: Record<DisplayedFieldKey, string> = {
+export type DisplayedFields = Record<string, boolean>;
+
+export const DISPLAYED_FIELD_LABELS: Record<BaseDisplayedFieldKey, string> = {
   round: 'Round',
   stateRank: 'State Rank',
   aiRank: 'AI Rank',
+  quota: 'Quota',
+  category: 'Category',
   state: 'State',
   institute: 'Institute',
   course: 'Course',
-  quota: 'Quota',
-  category: 'Category',
+  seats: 'Seats',
   fee: 'Fee',
-  beds: 'Beds',
+  stipendYear1: 'Stipend Year 1',
   bondYears: 'Bond Years',
   bondPenalty: 'Bond Penalty',
-  stipendYear1: 'Stipend Year 1',
+  beds: 'Beds',
 };
 
 /** Column order and headers for table and sort options */
-export const COLUMN_ORDER: DisplayedFieldKey[] = [
+export const COLUMN_ORDER: BaseDisplayedFieldKey[] = [
   'round',
   'stateRank',
   'aiRank',
+  'quota',
+  'category',
   'state',
   'institute',
   'course',
-  'quota',
-  'category',
+  'seats',
   'fee',
-  'beds',
+  'stipendYear1',
   'bondYears',
   'bondPenalty',
-  'stipendYear1',
+  'beds',
 ];
 
-export const COLUMN_HEADERS: Record<DisplayedFieldKey, string> = {
+export const COLUMN_HEADERS: Record<BaseDisplayedFieldKey, string> = {
   round: 'ROUND',
   stateRank: 'STATE RANK',
   aiRank: 'AI RANK',
+  quota: 'QUOTA',
+  category: 'CATEGORY',
   state: 'STATE',
   institute: 'INSTITUTE',
   course: 'COURSE',
-  quota: 'QUOTA',
-  category: 'CATEGORY',
+  seats: 'SEATS',
   fee: 'FEE',
-  beds: 'BEDS',
+  stipendYear1: 'STIPEND YEAR 1',
   bondYears: 'BOND YEARS',
   bondPenalty: 'BOND PENALTY',
-  stipendYear1: 'STIPEND YEAR 1',
+  beds: 'BEDS',
 };
 
 export const DEFAULT_DISPLAYED_FIELDS: DisplayedFields = {
   round: true,
   stateRank: true,
   aiRank: true,
+  quota: true,
+  category: true,
   state: true,
   institute: true,
   course: true,
-  quota: true,
-  category: true,
+  seats: true,
   fee: true,
-  beds: true,
+  stipendYear1: true,
   bondYears: true,
   bondPenalty: true,
-  stipendYear1: true,
+  beds: true,
+};
+
+export const ALL_DYNAMIC_CR_FIELDS: DynamicCrFieldKey[] = (['2022', '2023', '2024', '2025'] as const).flatMap(
+  year =>
+    [1, 2, 3, 4, 5].map(
+      round => `cr_${year}_${round}` as DynamicCrFieldKey,
+    ),
+);
+
+export function getDynamicCrLabel(field: string): string {
+  const stateMatch = /^crState_(\d{4})_(\d+)$/.exec(field);
+  if (stateMatch) {
+    return `CR State ${stateMatch[1]} ${stateMatch[2]}`;
+  }
+  const match = /^cr_(\d{4})_(\d+)$/.exec(field);
+  if (!match) return field;
+  return `CR ${match[1]} ${match[2]}`;
+}
+
+export type InsightsPageType =
+  | 'Allotments'
+  | 'Closing Ranks'
+  | 'Seat Matrix'
+  | 'Fee, Stipend and Bond';
+
+export const PAGE_FIELD_CONFIG: Record<InsightsPageType, { staticFields: BaseDisplayedFieldKey[]; includeDynamicCr: boolean }> = {
+  Allotments: {
+    staticFields: ['round', 'stateRank', 'aiRank', 'state', 'institute', 'course', 'quota', 'category', 'fee', 'stipendYear1', 'bondYears', 'bondPenalty', 'beds'],
+    includeDynamicCr: false,
+  },
+  'Closing Ranks': {
+    staticFields: ['quota', 'category', 'stateRank', 'aiRank', 'state', 'institute', 'course', 'fee', 'stipendYear1', 'bondYears', 'bondPenalty', 'beds'],
+    includeDynamicCr: true,
+  },
+  'Seat Matrix': {
+    staticFields: ['round', 'quota', 'category', 'state', 'institute', 'course', 'seats', 'fee', 'stipendYear1', 'bondYears', 'bondPenalty', 'beds'],
+    includeDynamicCr: true,
+  },
+  'Fee, Stipend and Bond': {
+    staticFields: ['state', 'institute', 'course', 'quota', 'fee', 'stipendYear1', 'bondYears', 'bondPenalty', 'beds'],
+    includeDynamicCr: false,
+  },
 };
