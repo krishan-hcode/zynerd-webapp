@@ -23,9 +23,19 @@ import { type SortDirection, sortInsightRecords } from '@/insights/insightsSortU
 import InsightsLockedSection from '@/insights/InsightsLockedSection';
 import InsightsPageHeader from '@/insights/InsightsPageHeader';
 import InsightsRecordsTable from '@/insights/InsightsRecordsTable';
+import ChoiceListAssignmentModal from '@/insights/ChoiceListAssignmentModal';
+import ChoiceListManagerModal from '@/insights/ChoiceListManagerModal';
+import {
+  createChoiceList,
+  getRecordChoiceListCount,
+  isRecordInActiveChoiceList,
+  localChoiceListRepository,
+  toggleRecordInList,
+} from '@/insights/choiceList.service';
+import type { ChoiceListState } from '@/insights/choiceList.types';
 import type { SortByOption } from '@/insights/SortByModal';
 import InsightsToolbar, { type RankView } from '@/insights/InsightsToolbar';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 export type { RankView };
 
@@ -49,7 +59,7 @@ function mergeWithStaticOptions(recordOptions: string[], staticOptions: string[]
 }
 
 interface InsightsPageLayoutProps {
-  pageTitle: string;
+  pageTitle: InsightsPageType;
   selectedCounselling: ICounselling | null;
   onOpenCounsellingModal: () => void;
   records: IInsightRecord[];
@@ -79,6 +89,15 @@ export default function InsightsPageLayout({
   const [selectedDetailsRecord, setSelectedDetailsRecord] = useState<IInsightRecord | null>(null);
   const [filters, setFilters] = useState<InsightFilters>(DEFAULT_FILTERS);
   const [displayedFields, setDisplayedFields] = useState<DisplayedFields>(DEFAULT_DISPLAYED_FIELDS);
+  const [choiceListState, setChoiceListState] = useState<ChoiceListState>({
+    lists: [],
+    preferences: { mode: 'askEveryTime' },
+    activeChoiceListId: undefined,
+  });
+  const [isChoiceListManagerOpen, setIsChoiceListManagerOpen] = useState(false);
+  const [isChoiceListAssignmentOpen, setIsChoiceListAssignmentOpen] = useState(false);
+  const [selectedChoiceListRecord, setSelectedChoiceListRecord] = useState<IInsightRecord | null>(null);
+  const [hasHydratedChoiceLists, setHasHydratedChoiceLists] = useState(false);
   const pageConfig = PAGE_FIELD_CONFIG[pageTitle as InsightsPageType] ?? PAGE_FIELD_CONFIG.Allotments;
   const dynamicCrFields = pageConfig.includeDynamicCr ? ALL_DYNAMIC_CR_FIELDS : [];
   const allowedFieldKeys: DisplayedFieldKey[] = [...pageConfig.staticFields, ...dynamicCrFields];
@@ -101,6 +120,17 @@ export default function InsightsPageLayout({
     const filtered = applyInsightFilters(records, filters);
     return sortInsightRecords(filtered, sortBy, sortDirection);
   }, [records, filters, sortBy, sortDirection]);
+
+  useEffect(() => {
+    const savedState = localChoiceListRepository.loadChoiceLists();
+    setChoiceListState(savedState);
+    setHasHydratedChoiceLists(true);
+  }, []);
+
+  useEffect(() => {
+    if (!hasHydratedChoiceLists) return;
+    localChoiceListRepository.saveChoiceLists(choiceListState);
+  }, [choiceListState, hasHydratedChoiceLists]);
 
   const handleColumnHeaderClick = (columnKey: string) => {
     const key = columnKey as SortByOption;
@@ -154,6 +184,48 @@ export default function InsightsPageLayout({
     }
   };
 
+  const handleCreateChoiceList = (name: string) => {
+    const trimmedName = name.trim();
+    if (!trimmedName) return;
+
+    const alreadyExists = choiceListState.lists.some(
+      list => list.name.toLowerCase() === trimmedName.toLowerCase(),
+    );
+    if (alreadyExists) return;
+
+    setChoiceListState(prevState => ({
+      ...prevState,
+      lists: [...prevState.lists, createChoiceList(trimmedName)],
+    }));
+  };
+
+  const handleChoiceListToggleForSelectedRecord = (listId: string) => {
+    if (!selectedChoiceListRecord) return;
+    setChoiceListState(prevState => toggleRecordInList(prevState, selectedChoiceListRecord.id, listId));
+  };
+
+  const activeChoiceListName = useMemo(() => {
+    if (!choiceListState.activeChoiceListId) return 'Ask every time';
+    const activeList = choiceListState.lists.find(list => list.id === choiceListState.activeChoiceListId);
+    return activeList?.name ?? 'Ask every time';
+  }, [choiceListState.activeChoiceListId, choiceListState.lists]);
+
+  const selectedChoiceListMapByRecordId = useMemo(() => {
+    const selectionMap = new Map<string, boolean>();
+    records.forEach(record => {
+      selectionMap.set(record.id, isRecordInActiveChoiceList(choiceListState, record.id));
+    });
+    return selectionMap;
+  }, [choiceListState, records]);
+
+  const choiceListCountMapByRecordId = useMemo(() => {
+    const countMap = new Map<string, number>();
+    records.forEach(record => {
+      countMap.set(record.id, getRecordChoiceListCount(choiceListState, record.id));
+    });
+    return countMap;
+  }, [choiceListState, records]);
+
   return (
     <div className="bg-white rounded-xl border border-customGray-10 shadow-sm mx-4 mt-4 p-4 md:p-6 min-h-[60vh]">
       <InsightsPageHeader
@@ -183,6 +255,8 @@ export default function InsightsPageLayout({
           setSortDirection('asc');
         }}
         onOpenFiltersModal={() => setIsFiltersModalOpen(true)}
+        onOpenChoiceListModal={() => setIsChoiceListManagerOpen(true)}
+        choiceListModeLabel={activeChoiceListName}
       />
 
 
@@ -241,6 +315,20 @@ export default function InsightsPageLayout({
             setIsCrDetailsModalOpen(false);
           }
         }}
+        isChoiceListSelected={recordId => selectedChoiceListMapByRecordId.get(recordId) ?? false}
+        getChoiceListCount={recordId => choiceListCountMapByRecordId.get(recordId) ?? 0}
+        showChoiceListCountBadge={!choiceListState.activeChoiceListId}
+        onChoiceListClick={record => {
+          const activeChoiceListId = choiceListState.activeChoiceListId;
+          if (activeChoiceListId) {
+            setChoiceListState(prevState =>
+              toggleRecordInList(prevState, record.id, activeChoiceListId),
+            );
+            return;
+          }
+          setSelectedChoiceListRecord(record);
+          setIsChoiceListAssignmentOpen(true);
+        }}
       />
 
       <InsightsLockedSection />
@@ -284,6 +372,43 @@ export default function InsightsPageLayout({
         onClose={handleCrDetailsClose}
         record={selectedCrRecord}
         clickedCrKey={selectedCrKey}
+      />
+
+      <ChoiceListManagerModal
+        isOpen={isChoiceListManagerOpen}
+        onClose={() => setIsChoiceListManagerOpen(false)}
+        mode={choiceListState.preferences.mode}
+        lists={choiceListState.lists.map(list => ({
+          id: list.id,
+          name: list.name,
+          itemCount: list.itemIds.length,
+        }))}
+        onCreateList={handleCreateChoiceList}
+        activeChoiceListId={choiceListState.activeChoiceListId}
+        onSelectList={listId =>
+          setChoiceListState(prevState => ({
+            ...prevState,
+            activeChoiceListId: listId,
+          }))
+        }
+        onSelectAskEverytime={() =>
+          setChoiceListState(prevState => ({
+            ...prevState,
+            activeChoiceListId: undefined,
+          }))
+        }
+      />
+
+      <ChoiceListAssignmentModal
+        isOpen={isChoiceListAssignmentOpen}
+        onClose={() => setIsChoiceListAssignmentOpen(false)}
+        lists={choiceListState.lists.map(list => ({
+          id: list.id,
+          name: list.name,
+          itemCount: list.itemIds.length,
+          isSelected: selectedChoiceListRecord ? list.itemIds.includes(selectedChoiceListRecord.id) : false,
+        }))}
+        onToggleList={handleChoiceListToggleForSelectedRecord}
       />
     </div>
   );

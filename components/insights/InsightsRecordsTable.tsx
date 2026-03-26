@@ -12,7 +12,9 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
   ChevronUpIcon,
+  HeartIcon as HeartIconOutline,
 } from '@heroicons/react/24/outline';
+import { HeartIcon as HeartIconSolid } from '@heroicons/react/24/solid';
 import { useEffect, useState } from 'react';
 import { classNames } from '@/utils/utils';
 
@@ -149,6 +151,10 @@ interface InsightsRecordsTableProps {
   sortDirection?: SortDirection;
   onColumnHeaderClick?: (columnKey: string) => void;
   onCellClick?: (record: IInsightRecord, fieldKey: DisplayedFieldKey) => void;
+  isChoiceListSelected?: (recordId: string) => boolean;
+  getChoiceListCount?: (recordId: string) => number;
+  showChoiceListCountBadge?: boolean;
+  onChoiceListClick?: (record: IInsightRecord) => void;
 }
 
 export default function InsightsRecordsTable({
@@ -162,6 +168,10 @@ export default function InsightsRecordsTable({
   sortDirection = 'asc',
   onColumnHeaderClick,
   onCellClick,
+  isChoiceListSelected,
+  getChoiceListCount,
+  showChoiceListCountBadge = false,
+  onChoiceListClick,
 }: InsightsRecordsTableProps) {
   const { isPremiumPurchased } = usePremiumStatus();
   const [currentPage, setCurrentPage] = useState(1);
@@ -236,6 +246,8 @@ export default function InsightsRecordsTable({
                   </th>
                 );
               })}
+              <th className="px-3 py-2 font-semibold text-white text-xs whitespace-nowrap text-center" scope="col">
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -253,6 +265,35 @@ export default function InsightsRecordsTable({
                     {getCellValue(record, key, rankView)}
                   </td>
                 ))}
+                <td className="px-3 py-2 text-center">
+                  {(() => {
+                    const count = getChoiceListCount?.(record.id) ?? 0;
+                    const isSelected = isChoiceListSelected?.(record.id) ?? false;
+                    const shouldShowBadge = showChoiceListCountBadge && count > 1;
+                    return (
+                      <button
+                        type="button"
+                        onClick={event => {
+                          event.stopPropagation();
+                          onChoiceListClick?.(record);
+                        }}
+                        className="relative inline-flex  items-center justify-center"
+                        aria-label="Add to choice list"
+                      >
+                        {isSelected ? (
+                          <HeartIconSolid className="h-8 w-8 text-secondary-lightRed " />
+                        ) : (
+                          <HeartIconOutline className="h-8 w-8 text-secondary-lightRed/40" />
+                        )}
+                        {shouldShowBadge ? (
+                          <span className="absolute bottom-[2px] right-[2px] inline-flex h-4 w-4 items-center justify-center rounded-full bg-secondary-lightRed p-1 text-[8px] font-semibold text-white border border-white shadow-sm">
+                            {count}
+                          </span>
+                        ) : null}
+                      </button>
+                    );
+                  })()}
+                </td>
               </tr>
             ))}
           </tbody>

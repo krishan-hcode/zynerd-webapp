@@ -34,7 +34,7 @@ export default function SortByModal({
     })),
   ];
   const [pendingOption, setPendingOption] = useState<SortByOption>(selectedOption);
-  const { isPremiumPurchased } = usePremiumStatus()
+  const { isPremiumPurchased } = usePremiumStatus();
   useEffect(() => {
     if (isOpen) {
       setPendingOption(selectedOption);
@@ -51,16 +51,17 @@ export default function SortByModal({
       isOpen={isOpen}
       onClose={onClose}
       shouldHaveCrossIcon
-      containerAdditionalClasses="max-w-sm"
+      containerAdditionalClasses="max-w-sm max-h-[70vh] !p-0 sm:!p-0 m-0"
     >
-      <div className="pr-8">
+      <div className="shrink-0 p-4">
         <h2 className="text-lg font-semibold text-primary-dark font-besley">
           Sort by
         </h2>
       </div>
-      <div className="mt-4 max-h-[50vh] overflow-y-auto pr-1" style={{ scrollbarGutter: 'stable' }}>
+      <div className="mx-4" style={{ scrollbarGutter: 'stable' }}>
         <div
           className={classNames(
+            'mb-5',
             sortOptions.length > 5
               ? 'grid grid-cols-2 gap-2'
               : 'space-y-2',
@@ -103,20 +104,21 @@ export default function SortByModal({
             </label>
           ))}
         </div>
-      </div>
-      <div className="mt-6 flex justify-end">
-        <button
-          type="button"
-          disabled={!isPremiumPurchased}
-          onClick={handleApply}
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-primary-blue text-white font-inter text-sm font-medium hover:opacity-90 transition-opacity disabled:opacity-70 disabled:cursor-not-allowed"
-        >
+        <div className="sticky bottom-0 left-0 right-0 z-10 bg-white p-4 border-t border-customGray-10">
+          <button
+            type="button"
+            disabled={!isPremiumPurchased}
+            onClick={handleApply}
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-primary-blue text-white font-inter text-sm font-medium hover:opacity-90 transition-opacity disabled:opacity-70 disabled:cursor-not-allowed"
+          >
 
-          {!isPremiumPurchased && (
-            <LockClosedIcon className="h-4 w-4" aria-hidden />
-          )}
-          Apply
-        </button>
+            {!isPremiumPurchased && (
+              <LockClosedIcon className="h-4 w-4" aria-hidden />
+            )}
+            Apply
+          </button>
+        </div>
+
       </div>
 
     </Modal>

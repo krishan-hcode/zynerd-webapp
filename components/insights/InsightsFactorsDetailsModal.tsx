@@ -174,178 +174,177 @@ export default function InsightsFactorsDetailsModal({
             </div>
           </div>
         )}
-        {!showAirStateRankCards && <div className="border border-primary-blue/20 rounded-xl bg-gradient-to-r from-primary-blue/5 to-primary-blue/5 p-4 shadow-md shadow-primary-blue/5">
-          <div
-            className={`overflow-x-auto scrollbar-hide pt-4`}
-          >
-            <div className="flex gap-3 min-w-max">
-              {YEARS.map(year => {
-                const roundValues = ROUNDS.map(round => {
-                  const airKey = `cr_${year}_${round}` as CrKey;
-                  const stateKey = `crState_${year}_${round}` as StateCrKey;
-                  const airRaw = record[airKey];
+        {!showAirStateRankCards && presentCrKeys.length !== 0 &&
+          <div className="border border-primary-blue/20 rounded-xl bg-gradient-to-r from-primary-blue/5 to-primary-blue/5 p-4 shadow-md shadow-primary-blue/5">
+            <p className="text-xs font-semibold text-primary-blue font-inter mb-4">All India Rank</p>
+            <div
+              className={`overflow-x-auto scrollbar-hide pt-4`}
+            >
 
-                  if (!showAirAndStateCrValues) {
-                    if (
-                      airRaw === undefined ||
-                      airRaw === null ||
-                      airRaw === '' ||
-                      airRaw === '—'
-                    )
+              <div className="flex gap-3 min-w-max">
+                {YEARS.map(year => {
+                  const roundValues = ROUNDS.map(round => {
+                    const airKey = `cr_${year}_${round}` as CrKey;
+                    const stateKey = `crState_${year}_${round}` as StateCrKey;
+                    const airRaw = record[airKey];
+
+                    if (!showAirAndStateCrValues) {
+                      if (
+                        airRaw === undefined ||
+                        airRaw === null ||
+                        airRaw === '' ||
+                        airRaw === '—'
+                      )
+                        return null;
+                      if (Array.isArray(airRaw) && airRaw.length === 0) return null;
+                      return { round, airKey, stateKey, airRaw, stateRaw: undefined as unknown };
+                    }
+
+                    const stateRaw = record[stateKey];
+
+                    if (!isPresentCrValue(airRaw) && !isPresentCrValue(stateRaw)) {
                       return null;
-                    if (Array.isArray(airRaw) && airRaw.length === 0) return null;
-                    return { round, airKey, stateKey, airRaw, stateRaw: undefined as unknown };
-                  }
+                    }
 
-                  const stateRaw = record[stateKey];
+                    return {
+                      round,
+                      airKey,
+                      stateKey,
+                      airRaw,
+                      stateRaw,
+                    };
+                  }).filter(Boolean) as Array<{
+                    round: number;
+                    airKey: CrKey;
+                    stateKey: StateCrKey;
+                    airRaw: unknown;
+                    stateRaw: unknown | undefined;
+                  }>;
 
-                  if (!isPresentCrValue(airRaw) && !isPresentCrValue(stateRaw)) {
-                    return null;
-                  }
+                  if (roundValues.length === 0) return null;
 
-                  return {
-                    round,
-                    airKey,
-                    stateKey,
-                    airRaw,
-                    stateRaw,
-                  };
-                }).filter(Boolean) as Array<{
-                  round: number;
-                  airKey: CrKey;
-                  stateKey: StateCrKey;
-                  airRaw: unknown;
-                  stateRaw: unknown | undefined;
-                }>;
-
-                if (roundValues.length === 0) return null;
-
-                return (
-                  <div
-                    key={year}
-                    className="flex-none min-w-[220px] border border-customGray-10 rounded-xl bg-white p-3.5 shadow-sm relative pt-4"
-                  >
-                    <div className="text-center mb-2 absolute -top-4 left-4">
-                      <span className="inline-flex items-center justify-center rounded-md bg-gradient-to-r from-primary-blue/70 to-primary-blue/90 px-2 py-1 text-xs font-semibold  font-inter text-white">
-                        {year}
-                      </span>
-                    </div>
-                    {showAirAndStateCrValues ? (
-                      <div className="overflow-x-auto pt-1">
-                        <table className="w-full min-w-[200px] border-collapse text-left">
-                          <thead>
-                            <tr>
-                              <th className="w-24 p-1 align-bottom text-xxs font-medium text-customGray-60 font-inter" />
-                              {roundValues.map(({ round: r }) => (
-                                <th
-                                  key={`h-${r}`}
-                                  className="p-1 pb-2 text-center text-xxs font-semibold text-customGray-60 font-inter whitespace-nowrap"
-                                >
-                                  Round {r}
-                                </th>
-                              ))}
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr>
-                              <td className="align-middle py-2 pr-2 text-xxs font-semibold text-primary-blue font-inter whitespace-nowrap">
-                                ALL INDIA RANK
-                              </td>
-                              {roundValues.map(({ round: r, airKey, airRaw }) => (
-                                <td key={`air-${r}`} className="px-1 py-2 text-center align-middle">
-                                  {isAllIndiaRankMode &&
-                                    onOpenCrDetails &&
-                                    isPresentCrValue(airRaw) ? (
-                                    <button
-                                      type="button"
-                                      onClick={() => onOpenCrDetails(airKey)}
-                                      className="text-xxs font-interMedium text-primary-blue underline decoration-primary-blue underline-offset-2 hover:opacity-80"
-                                    >
-                                      {formatCrValue(airRaw, r)}
-                                    </button>
-                                  ) : (
-                                    <span className="text-xxs font-interMedium text-primary-blue">
-                                      {formatCrValue(airRaw, r)}
-                                    </span>
-                                  )}
-                                </td>
-                              ))}
-                            </tr>
-                            <tr className="border-t border-customGray-10">
-                              <td className="align-middle py-2 pr-2 text-xxs font-semibold text-secondary-purple font-inter whitespace-nowrap">
-                                STATE RANK
-                              </td>
-                              {roundValues.map(({ round: r, stateKey, stateRaw }) => (
-                                <td key={`state-${r}`} className="px-1 py-2 text-center align-middle">
-                                  {onOpenCrDetails && isPresentCrValue(stateRaw) ? (
-                                    <button
-                                      type="button"
-                                      onClick={() => onOpenCrDetails(stateKey)}
-                                      className="text-xxs font-interMedium text-secondary-purple underline decoration-secondary-purple underline-offset-2 hover:opacity-80"
-                                    >
-                                      {formatCrValue(stateRaw, r)}
-                                    </button>
-                                  ) : (
-                                    <span className="text-xxs font-interMedium text-secondary-purple">
-                                      {formatCrValue(stateRaw, r)}
-                                    </span>
-                                  )}
-                                </td>
-                              ))}
-                            </tr>
-                          </tbody>
-                        </table>
+                  return (
+                    <div
+                      key={year}
+                      className="flex-none min-w-[220px] border border-customGray-10 rounded-xl bg-white p-3.5 shadow-sm relative pt-4"
+                    >
+                      <div className="text-center mb-2 absolute -top-4 left-4">
+                        <span className="inline-flex items-center justify-center rounded-md bg-gradient-to-r from-primary-blue/70 to-primary-blue/90 px-2 py-1 text-xs font-semibold  font-inter text-white">
+                          {year}
+                        </span>
                       </div>
-                    ) : (
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                        {roundValues.map(({ round, airKey, airRaw, stateRaw }) => {
-                          const content = (
-                            <>
-                              <div className="text-xs font-semibold text-primary-dark font-inter">
-                                Round {round}
-                              </div>
-                              <div className="text-xxs font-medium text-primary-blue font-inter">
-                                {formatCrValue(airRaw, round)}
-                              </div>
-                            </>
-                          );
+                      {showAirAndStateCrValues ? (
+                        <div className="overflow-x-auto pt-1">
 
-                          if (isAllIndiaRankMode && onOpenCrDetails) {
+                          <table className="w-full min-w-[200px] border-collapse text-left">
+                            <thead>
+                              <tr>
+                                <th className="w-24 p-1 align-bottom text-xxs font-medium text-customGray-60 font-inter" />
+                                {roundValues.map(({ round: r }) => (
+                                  <th
+                                    key={`h-${r}`}
+                                    className="p-1 pb-2 text-center text-xxs font-semibold text-customGray-60 font-inter whitespace-nowrap "
+                                  >
+                                    Round {r}
+                                  </th>
+                                ))}
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td className="align-middle py-2 pr-2 text-xxs font-semibold text-primary-blue font-inter whitespace-nowrap">
+                                  ALL INDIA RANK
+                                </td>
+                                {roundValues.map(({ round: r, airKey, airRaw }) => (
+                                  <td key={`air-${r}`} className="px-1 py-2 text-center align-middle">
+                                    {isAllIndiaRankMode &&
+                                      onOpenCrDetails &&
+                                      isPresentCrValue(airRaw) ? (
+                                      <button
+                                        type="button"
+                                        onClick={() => onOpenCrDetails(airKey)}
+                                        className="text-xxs font-interMedium text-primary-blue underline decoration-primary-blue underline-offset-2 hover:opacity-80"
+                                      >
+                                        {formatCrValue(airRaw, r)}
+                                      </button>
+                                    ) : (
+                                      <span className="text-xxs font-interMedium text-primary-blue">
+                                        {formatCrValue(airRaw, r)}
+                                      </span>
+                                    )}
+                                  </td>
+                                ))}
+                              </tr>
+                              <tr className="border-t border-customGray-10">
+                                <td className="align-middle py-2 pr-2 text-xxs font-semibold text-secondary-purple font-inter whitespace-nowrap">
+                                  STATE RANK
+                                </td>
+                                {roundValues.map(({ round: r, stateKey, stateRaw }) => (
+                                  <td key={`state-${r}`} className="px-1 py-2 text-center align-middle">
+                                    {onOpenCrDetails && isPresentCrValue(stateRaw) ? (
+                                      <button
+                                        type="button"
+                                        onClick={() => onOpenCrDetails(stateKey)}
+                                        className="text-xxs font-interMedium text-secondary-purple underline decoration-secondary-purple underline-offset-2 hover:opacity-80"
+                                      >
+                                        {formatCrValue(stateRaw, r)}
+                                      </button>
+                                    ) : (
+                                      <span className="text-xxs font-interMedium text-secondary-purple">
+                                        {formatCrValue(stateRaw, r)}
+                                      </span>
+                                    )}
+                                  </td>
+                                ))}
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      ) : (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                          {roundValues.map(({ round, airKey, airRaw, stateRaw }) => {
+                            const content = (
+                              <>
+                                <div className="text-xs font-semibold text-primary-dark font-inter">
+                                  Round {round}
+                                </div>
+                                <div className="text-xxs font-medium text-primary-blue font-inter">
+                                  {formatCrValue(airRaw, round)}
+                                </div>
+                              </>
+                            );
+
+                            if (isAllIndiaRankMode && onOpenCrDetails) {
+                              return (
+                                <button
+                                  key={round}
+                                  type="button"
+                                  onClick={() => onOpenCrDetails?.(airKey)}
+                                  className="flex flex-col items-start justify-start rounded-lg px-2 py-1 text-center bg-white  cursor-pointer hover:bg-customGray-5 transition-colors"
+                                >
+                                  {content}
+                                </button>
+                              );
+                            }
+
                             return (
-                              <button
+                              <div
                                 key={round}
-                                type="button"
-                                onClick={() => onOpenCrDetails?.(airKey)}
-                                className="flex flex-col items-start justify-start border-customGray-10 rounded-lg px-2 py-1 text-center bg-white cursor-pointer hover:bg-customGray-5 transition-colors"
+                                className="border border-customGray-10 rounded-lg px-2 py-1 text-center bg-white"
                               >
                                 {content}
-                              </button>
+                              </div>
                             );
-                          }
-
-                          return (
-                            <div
-                              key={round}
-                              className="border border-customGray-10 rounded-lg px-2 py-1 text-center bg-white"
-                            >
-                              {content}
-                            </div>
-                          );
-                        })}
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
+                          })}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
             </div>
-          </div>
 
-          {presentCrKeys.length === 0 && (
-            <div className="text-xs text-customGray-60 font-inter">
-              No closing-round values available for this record.
-            </div>
-          )}
-        </div>}
+          </div>}
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <div className="border border-customGray-10 rounded-xl bg-white  shadow-sm">

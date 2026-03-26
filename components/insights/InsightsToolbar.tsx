@@ -4,8 +4,10 @@ import { classNames } from '@/utils/utils';
 import {
   BarsArrowDownIcon,
   FunnelIcon,
-  HeartIcon,
 } from '@heroicons/react/24/outline';
+import {
+  HeartIcon,
+} from '@heroicons/react/24/solid';
 import { useState } from 'react';
 
 export type RankView = 'stateRank' | 'aiRank';
@@ -19,6 +21,8 @@ interface InsightsToolbarProps {
   allowedFieldKeys: DisplayedFieldKey[];
   onSortChange: (option: SortByOption) => void;
   onOpenFiltersModal?: () => void;
+  onOpenChoiceListModal?: () => void;
+  choiceListModeLabel?: string;
 }
 
 export default function InsightsToolbar({
@@ -30,8 +34,9 @@ export default function InsightsToolbar({
   onSortChange,
   pageTitle,
   onOpenFiltersModal,
+  onOpenChoiceListModal,
+  choiceListModeLabel = 'Ask every time',
 }: InsightsToolbarProps) {
-  console.log(pageTitle == 'Closing Ranks' || pageTitle == 'Seat Matrix')
   const [isSortModalOpen, setIsSortModalOpen] = useState(false);
   return (
     <>
@@ -89,15 +94,18 @@ export default function InsightsToolbar({
             )}
             <button
               type="button"
-              className="inline-flex items-center gap-2 px-2 py-1 rounded-lg border border-customGray-10 shadow-sm text-primary-dark font-inter text-xs hover:bg-customGray-5 transition-colors whitespace-nowrap"
+              onClick={() => onOpenChoiceListModal?.()}
+              className={classNames("inline-flex items-center gap-2 px-2 py-1 rounded-lg border border-customGray-10 shadow-sm text-primary-dark font-inter text-xs hover:bg-customGray-5 transition-colors whitespace-nowrap", choiceListModeLabel != "Ask every time" ? 'border-secondary-lightRed/20 hover:bg-secondary-lightRed/10' : 'hover:bg-customGray-5')}
             >
-              <HeartIcon className="h-3 w-3 flex-shrink-0" />
+              <div className='bg-secondary-lightRed/10 rounded-full p-1'>
+                <HeartIcon className="h-3 w-3 flex-shrink-0 text-secondary-lightRed" />
+              </div>
               <div className='flex flex-col items-start'>
-                <p className='text-[10px] text-customGray-50 font-inter whitespace-nowrap'>
+                <p className='text-[8px] text-customGray-50 font-inter whitespace-nowrap'>
                   <span className='text-primary-dark font-medium'>Choice List</span>
                 </p>
                 <p className='text-xs text-customGray-50 font-inter whitespace-nowrap'>
-                  <span className='text-primary-dark font-medium'>Ask every time</span>
+                  <span className='text-primary-dark font-medium'>{choiceListModeLabel}</span>
                 </p>
               </div>
 
