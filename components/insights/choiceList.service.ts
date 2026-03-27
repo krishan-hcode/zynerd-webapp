@@ -1,8 +1,8 @@
 import type { ChoiceList, ChoiceListRepository, ChoiceListState } from '@/insights/choiceList.types';
 
-const CHOICE_LIST_STORAGE_KEY = 'insights.choiceLists.v1';
+const CHOICE_LIST_STORAGE_KEY_PREFIX = 'insights.choiceLists.v2.counselling';
 
-const DEFAULT_CHOICE_LIST_STATE: ChoiceListState = {
+export const DEFAULT_CHOICE_LIST_STATE: ChoiceListState = {
   lists: [],
   preferences: {
     mode: 'askEveryTime',
@@ -53,10 +53,11 @@ function normalizeChoiceListState(value: unknown): ChoiceListState {
 }
 
 export const localChoiceListRepository: ChoiceListRepository = {
-  loadChoiceLists: () => {
+  loadChoiceLists: (scopeKey: string) => {
     if (typeof window === 'undefined') return DEFAULT_CHOICE_LIST_STATE;
     try {
-      const raw = window.localStorage.getItem(CHOICE_LIST_STORAGE_KEY);
+      const storageKey = `${CHOICE_LIST_STORAGE_KEY_PREFIX}.${scopeKey}`;
+      const raw = window.localStorage.getItem(storageKey);
       if (!raw) return DEFAULT_CHOICE_LIST_STATE;
       const parsed = JSON.parse(raw);
       return normalizeChoiceListState(parsed);
@@ -64,9 +65,10 @@ export const localChoiceListRepository: ChoiceListRepository = {
       return DEFAULT_CHOICE_LIST_STATE;
     }
   },
-  saveChoiceLists: (state: ChoiceListState) => {
+  saveChoiceLists: (scopeKey: string, state: ChoiceListState) => {
     if (typeof window === 'undefined') return;
-    window.localStorage.setItem(CHOICE_LIST_STORAGE_KEY, JSON.stringify(state));
+    const storageKey = `${CHOICE_LIST_STORAGE_KEY_PREFIX}.${scopeKey}`;
+    window.localStorage.setItem(storageKey, JSON.stringify(state));
   },
 };
 

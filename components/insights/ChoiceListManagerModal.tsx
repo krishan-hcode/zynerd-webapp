@@ -8,6 +8,7 @@ import { useMemo, useState } from 'react';
 interface ChoiceListManagerModalProps {
   isOpen: boolean;
   onClose: () => void;
+  counsellingName?: string;
   lists: Array<{
     id: string;
     name: string;
@@ -23,6 +24,7 @@ interface ChoiceListManagerModalProps {
 export default function ChoiceListManagerModal({
   isOpen,
   onClose,
+  counsellingName,
   lists,
   mode,
   activeChoiceListId,
@@ -60,6 +62,11 @@ export default function ChoiceListManagerModal({
     >
       <div className="flex items-center justify-between border-b border-customGray-10 bg-gradient-to-r from-white to-customGray-3/40 px-6 py-4">
         <div>
+          {counsellingName ? (
+            <p className="text-[11px] font-interMedium uppercase tracking-[0.08em] text-customGray-50">
+              {counsellingName}
+            </p>
+          ) : null}
           <h2 className="text-lg font-semibold text-primary-dark font-inter">Choice List</h2>
         </div>
         <button

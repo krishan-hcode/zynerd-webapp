@@ -11,6 +11,7 @@ import { useMemo, useState } from 'react';
 interface ChoiceListAssignmentModalProps {
   isOpen: boolean;
   onClose: () => void;
+  counsellingName?: string;
   lists: Array<{
     id: string;
     name: string;
@@ -23,6 +24,7 @@ interface ChoiceListAssignmentModalProps {
 export default function ChoiceListAssignmentModal({
   isOpen,
   onClose,
+  counsellingName,
   lists,
   onToggleList,
 }: ChoiceListAssignmentModalProps) {
@@ -43,9 +45,12 @@ export default function ChoiceListAssignmentModal({
     >
       <div className="flex items-center justify-between border-b border-customGray-10 bg-gradient-to-r from-white to-customGray-3/40 px-6 py-4">
         <div>
-          <p className="text-[11px] font-interMedium uppercase tracking-[0.08em] text-customGray-50">
-            Quick Assignment
-          </p>
+
+          {counsellingName ? (
+            <p className="text-sm font-interMedium text-customGray-60">
+              {counsellingName}
+            </p>
+          ) : null}
           <h2 className="text-lg font-semibold text-primary-dark font-inter">Add to Choice List</h2>
         </div>
         <button
@@ -69,7 +74,7 @@ export default function ChoiceListAssignmentModal({
           />
         </div>
 
-        <div className="space-y-2 rounded-2xl border border-customGray-10 bg-white p-2">
+        <div className="space-y-2 rounded-2xl bg-white">
           {filteredLists.map(list => (
             <button
               key={list.id}

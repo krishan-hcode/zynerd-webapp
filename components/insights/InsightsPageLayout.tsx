@@ -27,6 +27,7 @@ import ChoiceListAssignmentModal from '@/insights/ChoiceListAssignmentModal';
 import ChoiceListManagerModal from '@/insights/ChoiceListManagerModal';
 import {
   createChoiceList,
+  DEFAULT_CHOICE_LIST_STATE,
   getRecordChoiceListCount,
   isRecordInActiveChoiceList,
   localChoiceListRepository,
@@ -103,6 +104,8 @@ export default function InsightsPageLayout({
   const [selectedChoiceListRecord, setSelectedChoiceListRecord] = useState<IInsightRecord | null>(null);
   const [hasHydratedChoiceLists, setHasHydratedChoiceLists] = useState(false);
   const [isRecordsExpanded, setIsRecordsExpanded] = useState(false);
+  const choiceListScopeKey =
+    selectedCounselling?.id != null ? String(selectedCounselling.id) : undefined;
   const pageConfig = PAGE_FIELD_CONFIG[pageTitle as InsightsPageType] ?? PAGE_FIELD_CONFIG.Allotments;
   const dynamicCrFields = pageConfig.includeDynamicCr ? ALL_DYNAMIC_CR_FIELDS : [];
   const allowedFieldKeys: DisplayedFieldKey[] = [...pageConfig.staticFields, ...dynamicCrFields];
@@ -127,15 +130,20 @@ export default function InsightsPageLayout({
   }, [records, filters, sortBy, sortDirection]);
 
   useEffect(() => {
-    const savedState = localChoiceListRepository.loadChoiceLists();
+    if (!choiceListScopeKey) {
+      setChoiceListState(DEFAULT_CHOICE_LIST_STATE);
+      setHasHydratedChoiceLists(true);
+      return;
+    }
+    const savedState = localChoiceListRepository.loadChoiceLists(choiceListScopeKey);
     setChoiceListState(savedState);
     setHasHydratedChoiceLists(true);
-  }, []);
+  }, [choiceListScopeKey]);
 
   useEffect(() => {
-    if (!hasHydratedChoiceLists) return;
-    localChoiceListRepository.saveChoiceLists(choiceListState);
-  }, [choiceListState, hasHydratedChoiceLists]);
+    if (!hasHydratedChoiceLists || !choiceListScopeKey) return;
+    localChoiceListRepository.saveChoiceLists(choiceListScopeKey, choiceListState);
+  }, [choiceListState, hasHydratedChoiceLists, choiceListScopeKey]);
 
   const handleColumnHeaderClick = (columnKey: string) => {
     const key = columnKey as SortByOption;
@@ -444,6 +452,7 @@ export default function InsightsPageLayout({
       <ChoiceListManagerModal
         isOpen={isChoiceListManagerOpen}
         onClose={() => setIsChoiceListManagerOpen(false)}
+        counsellingName={selectedCounselling?.name}
         mode={choiceListState.preferences.mode}
         lists={choiceListState.lists.map(list => ({
           id: list.id,
@@ -469,6 +478,7 @@ export default function InsightsPageLayout({
       <ChoiceListAssignmentModal
         isOpen={isChoiceListAssignmentOpen}
         onClose={() => setIsChoiceListAssignmentOpen(false)}
+        counsellingName={selectedCounselling?.name}
         lists={choiceListState.lists.map(list => ({
           id: list.id,
           name: list.name,
