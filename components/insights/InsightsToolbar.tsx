@@ -99,7 +99,7 @@ export default function InsightsToolbar({
         </button>
         <div className="rounded-2xl border border-customGray-10 bg-white p-3">
           <p className="mb-2 text-[11px] font-interMedium uppercase tracking-[0.08em] text-customGray-50">
-            Data Actions
+            Sort and Filter
           </p>
           <div className="grid grid-cols-2 gap-2">
             <button
