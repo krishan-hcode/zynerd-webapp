@@ -1,0 +1,175 @@
+{
+  "ALL_INSTITUTES": [
+    {
+      "id": 1,
+      "name": "Rangaraya Medical College, Kakinada",
+      "university": "NTR University of Health Sciences, Vijayawada",
+      "city": "Kakinada",
+      "state": "Andhra Pradesh",
+      "instituteType": "Government Institute",
+      "authority": "State Authority",
+      "counsellingBody": "Dr. NTRUHS",
+      "beds": 1450,
+      "localDistinction": "AU Local"
+    },
+    {
+      "id": 2,
+      "name": "Government Medical College, Kurnool",
+      "university": "NTR University of Health Sciences, Vijayawada",
+      "city": "Kurnool",
+      "state": "Andhra Pradesh",
+      "instituteType": "Government Institute",
+      "authority": "State Authority",
+      "counsellingBody": "Dr. NTRUHS",
+      "beds": 1200,
+      "localDistinction": "AU Local"
+    },
+    {
+      "id": 3,
+      "name": "Narayana Medical College, Nellore",
+      "university": "NTR University of Health Sciences, Vijayawada",
+      "city": "Nellore",
+      "state": "Andhra Pradesh",
+      "instituteType": "Private Institute (State University)",
+      "authority": "State Authority",
+      "counsellingBody": "Dr. NTRUHS",
+      "beds": 1050,
+      "localDistinction": "State Quota"
+    },
+    {
+      "id": 4,
+      "name": "Alluri Sitaram Raju Academy of Medical Sciences, Eluru",
+      "university": "NTR University of Health Sciences, Vijayawada",
+      "city": "Eluru",
+      "state": "Andhra Pradesh",
+      "instituteType": "Private Institute (State University)",
+      "authority": "State Authority",
+      "counsellingBody": "Dr. NTRUHS",
+      "beds": 950,
+      "localDistinction": "State Quota"
+    },
+    {
+      "id": 5,
+      "name": "SV Medical College, Tirupati",
+      "university": "NTR University of Health Sciences, Vijayawada",
+      "city": "Tirupati",
+      "state": "Andhra Pradesh",
+      "instituteType": "Government Institute",
+      "authority": "State Authority",
+      "counsellingBody": "Dr. NTRUHS",
+      "beds": 1100,
+      "localDistinction": "SVU Local"
+    },
+    {
+      "id": 6,
+      "name": "Guntur Medical College, Guntur",
+      "university": "NTR University of Health Sciences, Vijayawada",
+      "city": "Guntur",
+      "state": "Andhra Pradesh",
+      "instituteType": "Government Institute",
+      "authority": "State Authority",
+      "counsellingBody": "Dr. NTRUHS",
+      "beds": 1150,
+      "localDistinction": "AU Local"
+    },
+    {
+      "id": 7,
+      "name": "Sri Venkateswara Institute of Medical Sciences (SVIMS), Tirupati",
+      "university": "Sri Venkateswara Institute of Medical Sciences, Tirupati",
+      "city": "Tirupati",
+      "state": "Andhra Pradesh",
+      "instituteType": "INI (Institute of National Importance)",
+      "authority": "Central Authority",
+      "counsellingBody": "INI-CET",
+      "beds": 1300,
+      "localDistinction": "All India"
+    },
+    {
+      "id": 8,
+      "name": "Government Siddhartha Medical College, Vijayawada",
+      "university": "NTR University of Health Sciences, Vijayawada",
+      "city": "Vijayawada",
+      "state": "Andhra Pradesh",
+      "instituteType": "Government Institute",
+      "authority": "State Authority",
+      "counsellingBody": "Dr. NTRUHS",
+      "beds": 1000,
+      "localDistinction": "AU Local"
+    },
+    {
+      "id": 9,
+      "name": "Christian Medical College, Vellore",
+      "university": "The Tamil Nadu Dr. M.G.R. Medical University, Chennai",
+      "city": "Vellore",
+      "state": "Tamil Nadu",
+      "instituteType": "Deemed",
+      "authority": "Deemed Authority",
+      "counsellingBody": "MCC",
+      "beds": 1800,
+      "localDistinction": "Minority"
+    },
+    {
+      "id": 10,
+      "name": "Kasturba Medical College, Manipal",
+      "university": "Manipal Academy of Higher Education, Manipal",
+      "city": "Manipal",
+      "state": "Karnataka",
+      "instituteType": "Deemed",
+      "authority": "Deemed Authority",
+      "counsellingBody": "MCC",
+      "beds": 1500,
+      "localDistinction": "All India"
+    },
+    {
+      "id": 11,
+      "name": "Armed Forces Medical College (AFMC), Pune",
+      "university": "Maharashtra University of Health Sciences, Nashik",
+      "city": "Pune",
+      "state": "Maharashtra",
+      "instituteType": "AFMS",
+      "authority": "Central Authority",
+      "counsellingBody": "MCC",
+      "beds": 1200,
+      "localDistinction": "Service Quota"
+    },
+    {
+      "id": 12,
+      "name": "Maulana Azad Medical College, New Delhi",
+      "university": "University of Delhi, New Delhi",
+      "city": "New Delhi",
+      "state": "Delhi",
+      "instituteType": "Government Institute",
+      "authority": "State Authority",
+      "counsellingBody": "DGHS Delhi",
+      "beds": 1600,
+      "localDistinction": "Delhi Quota"
+    }
+  ],
+  "INSTITUTE_TYPE_OPTIONS": [
+    "AFMS",
+    "Deemed",
+    "Government Institute",
+    "INI (Institute of National Importance)",
+    "Private Institute (State University)"
+  ],
+  "AUTHORITY_OPTIONS": [
+    "Central Authority",
+    "Deemed Authority",
+    "State Authority"
+  ],
+  "STATE_OPTIONS": [
+    "Andhra Pradesh",
+    "Delhi",
+    "Karnataka",
+    "Maharashtra",
+    "Tamil Nadu"
+  ],
+  "UNIVERSITY_OPTIONS": [
+    "Manipal Academy of Higher Education, Manipal",
+    "Maharashtra University of Health Sciences, Nashik",
+    "NTR University of Health Sciences, Vijayawada",
+    "Sri Venkateswara Institute of Medical Sciences, Tirupati",
+    "The Tamil Nadu Dr. M.G.R. Medical University, Chennai",
+    "University of Delhi, New Delhi"
+  ]
+}
