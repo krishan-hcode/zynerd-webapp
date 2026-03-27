@@ -15,21 +15,24 @@ export default function InsightsCounsellingSelector({
   onOpenModal,
 }: InsightsCounsellingSelectorProps) {
   return (
-    <div className="flex flex-wrap items-center gap-3 mb-4">
+    <div className="mb-4 rounded-2xl border border-customGray-10 bg-white p-3">
+      <p className="mb-2 text-[11px] font-interMedium uppercase tracking-[0.08em] text-customGray-50">
+        Counselling
+      </p>
       <button
         type="button"
         onClick={onOpenModal}
-        className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white border border-customGray-10 shadow-sm text-primary-dark font-inter text-sm font-medium hover:bg-customGray-5 transition-colors min-w-[200px] justify-between"
+        className="flex w-full items-center justify-between gap-2 rounded-xl border border-customGray-10 bg-customGray-3/40 px-4 py-2.5 text-sm font-medium text-primary-dark transition-all hover:border-primary-blue/30"
       >
-        <span className="truncate text-left text-primary-blue">
+        <span className="truncate text-left text-primary-dark">
           {selectedCounselling?.name ?? 'Select counselling'}
         </span>
-        <ChevronDownIcon className="h-4 w-4 flex-shrink-0 text-customGray-50" />
+        <ChevronDownIcon className="h-4 w-4 flex-shrink-0 text-customGray-60" />
       </button>
       {selectedCounselling && (
         <Link
           href="/explore/counsellings"
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-customGray-10 shadow-sm text-primary-dark font-inter text-sm font-medium hover:bg-customGray-5 transition-colors"
+          className="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-customGray-10 bg-white px-4 py-2.5 text-sm font-medium text-primary-dark transition-all hover:border-primary-blue/30"
         >
           Go to counselling
           <ArrowTopRightOnSquareIcon className="h-4 w-4" />

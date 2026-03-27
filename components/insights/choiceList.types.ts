@@ -19,6 +19,6 @@ export interface ChoiceListState {
 }
 
 export interface ChoiceListRepository {
-  loadChoiceLists: () => ChoiceListState;
-  saveChoiceLists: (state: ChoiceListState) => void;
+  loadChoiceLists: (scopeKey: string) => ChoiceListState;
+  saveChoiceLists: (scopeKey: string, state: ChoiceListState) => void;
 }
