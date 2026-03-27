@@ -19,39 +19,31 @@ export default function InsightsPageHeader({
 
   return (
     <>
-      <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 mb-4">
-        <div className="flex flex-row items-baseline gap-x-4">
-          <h2 className="text-xl font-semibold text-primary-dark font-besley">
-            {pageTitle}
-          </h2>
+      <div className="mb-4 rounded-2xl border border-customGray-10 bg-gradient-to-b from-white to-customGray-3/40 p-4">
+        <p className="text-[11px] font-interMedium uppercase tracking-[0.08em] text-customGray-50">
+          Insights
+        </p>
+        <h2 className="mt-1 text-xl font-semibold text-primary-dark font-besley md:text-2xl">
+          {pageTitle}
+        </h2>
+        <div className="mt-3 flex flex-wrap items-center gap-2">
           {showWhatsThis ? (
             <button
               type="button"
               onClick={() => setIsWhatsThisModalOpen(true)}
-              className="text-customGray-50 underline font-inter text-xs hover:text-primary-dark transition-colors"
+              className="rounded-lg border border-customGray-10 bg-white px-3 py-1.5 text-xs font-inter text-customGray-70 transition-colors hover:border-primary-blue/30 hover:text-primary-blue"
             >
               What&apos;s this?
             </button>
           ) : (
-            <a href="#" className="text-customGray-50 underline font-inter text-xs">
+            <a href="#" className="rounded-lg border border-customGray-10 bg-white px-3 py-1.5 text-xs font-inter text-customGray-70">
               What&apos;s this?
             </a>
           )}
         </div>
-        <div className="flex items-center gap-4 text-xs">
-          <button
-            type="button"
-            onClick={() => setIsErrorModalOpen(true)}
-            className="text-customGray-50 underline-dotted underline-offset-2 font-inter flex items-center gap-1.5 underline hover:text-primary-dark transition-colors"
-          >
-            Spotted an error? Let us know
-          </button>
-        </div>
+
       </div>
-      <SpottedErrorModal
-        isOpen={isErrorModalOpen}
-        onClose={() => setIsErrorModalOpen(false)}
-      />
+
       {showWhatsThis && (
         <WhatsThisModal
           title={whatsThisTitle!}

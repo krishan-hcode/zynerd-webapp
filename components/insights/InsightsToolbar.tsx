@@ -40,81 +40,72 @@ export default function InsightsToolbar({
   const [isSortModalOpen, setIsSortModalOpen] = useState(false);
   return (
     <>
-      <div className="flex flex-nowrap justify-between items-end gap-2 mb-4 mt-10 overflow-x-auto min-w-0">
-        <div>
-          <p className="text-xs text-customGray-50 font-inter whitespace-nowrap flex-shrink-0">
-            Click on the record for detailed information and factors.
+      <div className="space-y-3">
+        {showRankToggle && (
+          <div className="rounded-2xl border border-customGray-10 bg-white p-3">
+            <p className="mb-2 text-[11px] font-interMedium uppercase tracking-[0.08em] text-customGray-50">
+              Rank Mode
+            </p>
+            <div className="grid grid-cols-2 gap-2">
+              <button
+                type="button"
+                onClick={() => onRankViewChange('stateRank')}
+                className={classNames(
+                  'rounded-xl px-3 py-2 text-xs font-inter font-medium transition-colors',
+                  rankView === 'stateRank'
+                    ? 'bg-primary-blue text-white'
+                    : 'border border-customGray-10 bg-white text-primary-dark hover:bg-customGray-5',
+                )}
+              >
+                State Rank
+              </button>
+              <button
+                type="button"
+                onClick={() => onRankViewChange('aiRank')}
+                className={classNames(
+                  'rounded-xl px-3 py-2 text-xs font-inter font-medium transition-colors whitespace-nowrap',
+                  rankView === 'aiRank'
+                    ? 'bg-primary-blue text-white'
+                    : 'border border-customGray-10 bg-white text-primary-dark hover:bg-customGray-5',
+                )}
+              >
+                All India Rank
+              </button>
+            </div>
+          </div>
+        )}
+
+        <button
+          type="button"
+          onClick={() => onOpenChoiceListModal?.()}
+          className={classNames(
+            'inline-flex w-full items-center gap-2 rounded-2xl border border-customGray-10 bg-white px-3 py-3 text-left text-xs font-inter text-primary-dark transition-colors',
+            choiceListModeLabel != 'Ask every time'
+              ? 'border-secondary-lightRed/25 bg-secondary-lightRed/5'
+              : 'hover:border-primary-blue/20 hover:bg-customGray-3',
+          )}
+        >
+          <div className="rounded-full bg-secondary-lightRed/15 p-1.5">
+            <HeartIcon className="h-3.5 w-3.5 flex-shrink-0 text-secondary-lightRed" />
+          </div>
+          <div className="flex flex-col items-start">
+            <p className="text-[9px] text-customGray-50 font-inter whitespace-nowrap">
+              <span className="font-medium text-customGray-60">Choice List Mode</span>
+            </p>
+            <p className="text-xs text-customGray-50 font-inter whitespace-nowrap">
+              <span className="font-medium text-primary-dark">{choiceListModeLabel}</span>
+            </p>
+          </div>
+        </button>
+        <div className="rounded-2xl border border-customGray-10 bg-white p-3">
+          <p className="mb-2 text-[11px] font-interMedium uppercase tracking-[0.08em] text-customGray-50">
+            Data Actions
           </p>
-          <p className="text-xs text-customGray-50 font-inter whitespace-nowrap flex-shrink-0">
-            (*) Indicates additional remarks in Details &amp; Factors.
-          </p>
-          {(pageTitle == 'Closing Ranks' || pageTitle == 'Seat Matrix') && <p className="text-xs text-customGray-50 font-inter whitespace-nowrap flex-shrink-0">
-            Click on Ranks to view the allotment list.
-          </p>}
-        </div>
-
-        <div className='flex flex-col gap-2 items-end'>
-          {/* <select
-            className="px-2 py-3 rounded-lg border border-customGray-10 shadow-sm text-primary-dark font-inter text-xs bg-white focus:outline-none focus:ring-2 focus:ring-primary-blue/20 flex-shrink-0"
-            defaultValue=""
-            aria-label="Select filter"
-          >
-            <option value="">Select filter</option>
-          </select> */}
-          <div className="flex flex-shrink-0 items-center gap-3 ml-1">
-
-
-            {showRankToggle && (
-              <div className="flex rounded-lg p-1 border border-customGray-10 shadow-sm overflow-hidden gap-1 bg-white">
-                <button
-                  type="button"
-                  onClick={() => onRankViewChange('stateRank')}
-                  className={classNames(
-                    'p-2 px-3 text-xs font-inter font-medium transition-colors whitespace-',
-                    rankView === 'stateRank'
-                      ? 'bg-primary-blue rounded-lg text-white nowrap shadow-md shadow-customGray-5'
-                      : ' text-primary-dark rounded-lg hover:bg-customGray-5',
-                  )}
-                >
-                  State Rank
-                </button>
-                <button
-                  type="button"
-                  onClick={() => onRankViewChange('aiRank')}
-                  className={classNames(
-                    'p-2 px-3 text-xs font-inter font-medium transition-colors whitespace-nowrap ',
-                    rankView === 'aiRank'
-                      ? 'bg-primary-blue rounded-lg text-white  shadow-md shadow-customGray-5'
-                      : ' text-primary-dark rounded-lg hover:bg-customGray-5',
-                  )}
-                >
-                  All India Rank
-                </button>
-              </div>
-            )}
-            <button
-              type="button"
-              onClick={() => onOpenChoiceListModal?.()}
-              className={classNames("inline-flex items-center gap-2 px-2 py-1 rounded-lg border border-customGray-10 shadow-sm text-primary-dark font-inter text-xs hover:bg-customGray-5 transition-colors whitespace-nowrap", choiceListModeLabel != "Ask every time" ? 'border-secondary-lightRed/20 hover:bg-secondary-lightRed/10' : 'hover:bg-customGray-5')}
-            >
-              <div className='bg-secondary-lightRed/10 rounded-full p-1'>
-                <HeartIcon className="h-3 w-3 flex-shrink-0 text-secondary-lightRed" />
-              </div>
-              <div className='flex flex-col items-start'>
-                <p className='text-[8px] text-customGray-50 font-inter whitespace-nowrap'>
-                  <span className='text-primary-dark font-medium'>Choice List</span>
-                </p>
-                <p className='text-xs text-customGray-50 font-inter whitespace-nowrap'>
-                  <span className='text-primary-dark font-medium'>{choiceListModeLabel}</span>
-                </p>
-              </div>
-
-            </button>
-
+          <div className="grid grid-cols-2 gap-2">
             <button
               type="button"
               onClick={() => setIsSortModalOpen(true)}
-              className="inline-flex items-center gap-2 px-2 py-3 rounded-lg border border-customGray-10 shadow-sm text-primary-dark font-inter text-xs hover:bg-customGray-5 transition-colors whitespace-nowrap"
+              className="inline-flex items-center justify-center gap-2 rounded-xl border border-customGray-10 bg-white px-3 py-2.5 text-xs font-inter text-primary-dark transition-colors hover:border-primary-blue/30 hover:bg-primary-blue/5"
             >
               <BarsArrowDownIcon className="h-4 w-4 flex-shrink-0" />
               Sort
@@ -122,13 +113,16 @@ export default function InsightsToolbar({
             <button
               type="button"
               onClick={() => onOpenFiltersModal?.()}
-              className="inline-flex items-center gap-2 px-4 py-3 rounded-lg border border-customGray-10 shadow-sm text-primary-dark font-inter text-xs hover:bg-customGray-5 transition-colors whitespace-nowrap"
+              className="inline-flex items-center justify-center gap-2 rounded-xl border border-customGray-10 bg-white px-3 py-2.5 text-xs font-inter text-primary-dark transition-colors hover:border-primary-blue/30 hover:bg-primary-blue/5"
             >
               <FunnelIcon className="h-4 w-4 flex-shrink-0" />
               Filter
             </button>
           </div>
         </div>
+
+
+
       </div>
       <SortByModal
         isOpen={isSortModalOpen}

@@ -211,116 +211,118 @@ export default function InsightsRecordsTable({
   const paginatedRecords = recordsToShow.slice(startIndex, endIndex);
 
   return (
-    <div className="space-y-3">
-      <div className="overflow-x-auto max-h-[50vh] overflow-y-auto rounded-lg border border-customGray-10 shadow-sm">
-        <table className="w-full min-w-[900px] text-left font-inter text-sm">
-          <thead className="sticky top-0 z-30 bg-primary-blue border-b border-primary-blue/20 ">
-            <tr>
-              {visibleColumns.map((key: DisplayedFieldKey) => {
-                const isSorted = sortBy === key;
-                return (
-                  <th
-                    key={key}
-                    className={classNames(
-                      'px-3 py-2 font-semibold text-white text-xs whitespace-nowrap',
-                      onColumnHeaderClick ? 'cursor-pointer select-none  transition-colors' : '',
-                    )}
-                    onClick={() => { if (typeof key === 'string') onColumnHeaderClick?.(key); }}
-                    scope="col"
-                  >
-                    <div className='flex flex-row items-center justify-between'>
-                      <span className="inline-flex items-center gap-1">
-                        {key in COLUMN_HEADERS
-                          ? COLUMN_HEADERS[key as keyof typeof COLUMN_HEADERS]
-                          : getDynamicCrLabel(key)}
+    <div className="space-y-4">
+      <div className="rounded-2xl border border-customGray-10 bg-white shadow-sm">
 
-                      </span>
-                      {isSorted && (
-                        sortDirection === 'asc' ? (
-                          <ChevronUpIcon className="h-3 w-3 text-white" aria-hidden />
-                        ) : (
-                          <ChevronDownIcon className="h-3 w-3 text-white" aria-hidden />
-                        )
+        <div className="max-h-[60vh] overflow-x-auto overflow-y-auto rounded-2xl">
+          <table className="w-full min-w-[900px] text-left font-inter text-sm">
+            <thead className="sticky top-0 z-30 border-b border-primary-blue/20 bg-gradient-to-r from-primary-blue to-[#355da8]">
+              <tr>
+                {visibleColumns.map((key: DisplayedFieldKey) => {
+                  const isSorted = sortBy === key;
+                  return (
+                    <th
+                      key={key}
+                      className={classNames(
+                        'px-4 py-3 text-xs font-semibold text-white whitespace-nowrap',
+                        onColumnHeaderClick ? 'cursor-pointer select-none  transition-colors' : '',
                       )}
-                    </div>
-                  </th>
-                );
-              })}
-              <th className="px-3 py-2 font-semibold text-white text-xs whitespace-nowrap text-center" scope="col">
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {paginatedRecords.map(record => (
-              <tr
-                key={record.id}
-                className="border-b border-customGray-10 hover:bg-customGray-5 transition-colors cursor-pointer"
-              >
-                {visibleColumns.map(key => (
-                  <td
-                    key={key}
-                    className="px-3 py-2 text-primary-dark whitespace-nowrap cursor-pointer text-xs"
-                    onClick={() => onCellClick?.(record, key)}
-                  >
-                    {getCellValue(record, key, rankView)}
-                  </td>
-                ))}
-                <td className="px-3 py-2 text-center">
-                  {(() => {
-                    const count = getChoiceListCount?.(record.id) ?? 0;
-                    const isSelected = isChoiceListSelected?.(record.id) ?? false;
-                    const shouldShowBadge = showChoiceListCountBadge && count > 1;
-                    return (
-                      <button
-                        type="button"
-                        onClick={event => {
-                          event.stopPropagation();
-                          onChoiceListClick?.(record);
-                        }}
-                        className="relative inline-flex  items-center justify-center"
-                        aria-label="Add to choice list"
-                      >
-                        {isSelected ? (
-                          <HeartIconSolid className="h-8 w-8 text-secondary-lightRed " />
-                        ) : (
-                          <HeartIconOutline className="h-8 w-8 text-secondary-lightRed/40" />
+                      onClick={() => { if (typeof key === 'string') onColumnHeaderClick?.(key); }}
+                      scope="col"
+                    >
+                      <div className='flex flex-row items-center justify-between'>
+                        <span className="inline-flex items-center gap-1">
+                          {key in COLUMN_HEADERS
+                            ? COLUMN_HEADERS[key as keyof typeof COLUMN_HEADERS]
+                            : getDynamicCrLabel(key)}
+
+                        </span>
+                        {isSorted && (
+                          sortDirection === 'asc' ? (
+                            <ChevronUpIcon className="h-3 w-3 text-white" aria-hidden />
+                          ) : (
+                            <ChevronDownIcon className="h-3 w-3 text-white" aria-hidden />
+                          )
                         )}
-                        {shouldShowBadge ? (
-                          <span className="absolute bottom-[2px] right-[2px] inline-flex h-4 w-4 items-center justify-center rounded-full bg-secondary-lightRed p-1 text-[8px] font-semibold text-white border border-white shadow-sm">
-                            {count}
-                          </span>
-                        ) : null}
-                      </button>
-                    );
-                  })()}
-                </td>
+                      </div>
+                    </th>
+                  );
+                })}
+                <th className="px-4 py-3 text-center text-xs font-semibold text-white whitespace-nowrap" scope="col">
+                </th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {paginatedRecords.map(record => (
+                <tr
+                  key={record.id}
+                  className="cursor-pointer border-b border-customGray-10/80 transition-colors hover:bg-primary-blue/5"
+                >
+                  {visibleColumns.map(key => (
+                    <td
+                      key={key}
+                      className="cursor-pointer whitespace-nowrap px-4 py-2.5 text-xs text-primary-dark"
+                      onClick={() => onCellClick?.(record, key)}
+                    >
+                      {getCellValue(record, key, rankView)}
+                    </td>
+                  ))}
+                  <td className="px-4 py-2 text-center">
+                    {(() => {
+                      const count = getChoiceListCount?.(record.id) ?? 0;
+                      const isSelected = isChoiceListSelected?.(record.id) ?? false;
+                      const shouldShowBadge = showChoiceListCountBadge && count > 1;
+                      return (
+                        <button
+                          type="button"
+                          onClick={event => {
+                            event.stopPropagation();
+                            onChoiceListClick?.(record);
+                          }}
+                          className="relative inline-flex items-center justify-center rounded-full transition-transform hover:scale-105"
+                          aria-label="Add to choice list"
+                        >
+                          {isSelected ? (
+                            <HeartIconSolid className="h-7 w-7 text-secondary-lightRed" />
+                          ) : (
+                            <HeartIconOutline className="h-7 w-7 text-secondary-lightRed/40" />
+                          )}
+                          {shouldShowBadge ? (
+                            <span className="absolute bottom-[2px] right-[2px] inline-flex h-4 w-4 items-center justify-center rounded-full border border-white bg-secondary-lightRed p-1 text-[8px] font-semibold text-white shadow-sm">
+                              {count}
+                            </span>
+                          ) : null}
+                        </button>
+                      );
+                    })()}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
 
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <p className="text-xxs text-customGray-50 font-inter">
+      <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-customGray-10 bg-customGray-3/30 px-4 py-3">
+        <p className="text-xxs font-inter text-customGray-60">
           Showing {startIndex + 1}–{endIndex} of {recordsToShow.length} records in {sessionYear} session
-        </p>
-        <div className="flex items-center gap-1">
+        </p>        <div className="flex items-center gap-1.5">
           <button
             type="button"
             onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
             disabled={currentPage <= 1}
             className={classNames(
-              'inline-flex items-center gap-1 rounded-md border px-2 py-1.5 text-xs font-medium transition-colors',
+              'inline-flex items-center gap-1 rounded-lg border px-2.5 py-1.5 text-xs font-medium transition-colors',
               currentPage <= 1
                 ? 'cursor-not-allowed border-customGray-10 bg-customGray-5 text-customGray-40'
-                : 'border-customGray-10 shadow-sm bg-white text-primary-dark hover:bg-customGray-5',
+                : 'border-customGray-10 bg-white text-primary-dark shadow-sm hover:border-primary-blue/30 hover:bg-primary-blue/5',
             )}
             aria-label="Previous page"
           >
             <ChevronLeftIcon className="h-4 w-4" />
             Previous
           </button>
-          <span className="px-2 py-1.5 text-xs text-customGray-50 font-inter">
+          <span className="rounded-md bg-white px-2.5 py-1.5 text-xs text-customGray-60 font-inter border border-customGray-10">
             Page {currentPage} of {totalPages}
           </span>
           <button
@@ -328,10 +330,10 @@ export default function InsightsRecordsTable({
             onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
             disabled={currentPage >= totalPages}
             className={classNames(
-              'inline-flex items-center gap-1 rounded-md border px-2 py-1.5 text-xs font-medium transition-colors',
+              'inline-flex items-center gap-1 rounded-lg border px-2.5 py-1.5 text-xs font-medium transition-colors',
               currentPage >= totalPages
                 ? 'cursor-not-allowed border-customGray-10 bg-customGray-5 text-customGray-40'
-                : 'border-customGray-10 shadow-sm bg-white text-primary-dark hover:bg-customGray-5',
+                : 'border-customGray-10 bg-white text-primary-dark shadow-sm hover:border-primary-blue/30 hover:bg-primary-blue/5',
             )}
             aria-label="Next page"
           >

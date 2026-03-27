@@ -1,7 +1,6 @@
 import Modal from '@/common/Modal';
 import type { IInsightRecord } from '@/types/insights.types';
 import { usePremiumStatus } from '@/hooks/usePremiumStatus';
-import { LockClosedIcon } from '@heroicons/react/24/outline';
 import { getDynamicCrLabel } from '@/insights/insightsFilter.types';
 import InsightsLockedSection from './InsightsLockedSection';
 
@@ -42,20 +41,28 @@ export default function InsightsCrDetailsModal({
       isOpen={isOpen}
       onClose={onClose}
       shouldHaveCrossIcon
-      containerAdditionalClasses="max-w-5xl"
+      containerAdditionalClasses="max-w-5xl rounded-2xl"
     >
       <div className="flex flex-col gap-6">
-        <div className="rounded-xl">
+        <div>
+          <p className="text-[11px] font-interMedium uppercase tracking-[0.08em] text-customGray-50">
+            Rank History Workspace
+          </p>
           <h2 className="text-lg font-semibold text-primary-dark font-besley">
             Allotment
           </h2>
         </div>
 
         <div className="rounded-xl border border-customGray-10 bg-white overflow-hidden">
-          <div className="px-4 py-3 border-b border-customGray-10">
-            <p className="text-xs font-inter text-customGray-60">
-              1 - {Math.min(visibleValues.length, totalRecords)} of {totalRecords} Records
-            </p>
+          <div className="border-b border-customGray-10 bg-customGray-3/40 px-4 py-3">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <p className="text-[11px] font-interMedium uppercase tracking-[0.08em] text-customGray-60">
+                {crLabel || 'Selected Rank'}
+              </p>
+              <p className="text-xs font-inter text-customGray-60">
+                1 - {Math.min(visibleValues.length, totalRecords)} of {totalRecords} Records
+              </p>
+            </div>
           </div>
 
           <div className="px-4 py-4">

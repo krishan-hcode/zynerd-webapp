@@ -35,7 +35,10 @@ import {
 import type { ChoiceListState } from '@/insights/choiceList.types';
 import type { SortByOption } from '@/insights/SortByModal';
 import InsightsToolbar, { type RankView } from '@/insights/InsightsToolbar';
-import { useEffect, useMemo, useState } from 'react';
+import { classNames } from '@/utils/utils';
+import { ArrowsPointingInIcon, ArrowsPointingOutIcon } from '@heroicons/react/24/outline';
+import { type CSSProperties, useEffect, useMemo, useState } from 'react';
+import SpottedErrorModal from '@/common/SpottedErrorModal';
 
 export type { RankView };
 
@@ -94,10 +97,12 @@ export default function InsightsPageLayout({
     preferences: { mode: 'askEveryTime' },
     activeChoiceListId: undefined,
   });
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
   const [isChoiceListManagerOpen, setIsChoiceListManagerOpen] = useState(false);
   const [isChoiceListAssignmentOpen, setIsChoiceListAssignmentOpen] = useState(false);
   const [selectedChoiceListRecord, setSelectedChoiceListRecord] = useState<IInsightRecord | null>(null);
   const [hasHydratedChoiceLists, setHasHydratedChoiceLists] = useState(false);
+  const [isRecordsExpanded, setIsRecordsExpanded] = useState(false);
   const pageConfig = PAGE_FIELD_CONFIG[pageTitle as InsightsPageType] ?? PAGE_FIELD_CONFIG.Allotments;
   const dynamicCrFields = pageConfig.includeDynamicCr ? ALL_DYNAMIC_CR_FIELDS : [];
   const allowedFieldKeys: DisplayedFieldKey[] = [...pageConfig.staticFields, ...dynamicCrFields];
@@ -226,112 +231,174 @@ export default function InsightsPageLayout({
     return countMap;
   }, [choiceListState, records]);
 
+  const layoutGridStyle = {
+    '--insights-layout-cols': isRecordsExpanded
+      ? '0px minmax(0, 1fr)'
+      : '320px minmax(0, 1fr)',
+  } as CSSProperties;
+
   return (
-    <div className="bg-white rounded-xl border border-customGray-10 shadow-sm mx-4 mt-4 p-4 md:p-6 min-h-[60vh]">
-      <InsightsPageHeader
-        pageTitle={pageTitle}
-        whatsThisTitle={whatsThisTitle}
-        whatsThisBody={whatsThisBody}
-      />
+    <div className="mx-4 mt-4 min-h-[60vh] p-3 shadow-sm md:p-4">
+      <div
+        className={classNames(
+          'grid grid-cols-1 gap-4 lg:[grid-template-columns:var(--insights-layout-cols)] lg:transition-[grid-template-columns] lg:duration-300 lg:ease-in-out',
+        )}
+        style={layoutGridStyle}
+      >
+        <aside
+          className={classNames(
+            'overflow-hidden rounded-2xl border bg-white shadow-sm transition-all duration-300 ease-in-out',
+            isRecordsExpanded
+              ? 'pointer-events-none -translate-x-3 border-transparent p-0 opacity-0'
+              : 'translate-x-0 border-customGray-10 p-4 opacity-100',
+          )}
+        >
+          <InsightsPageHeader
+            pageTitle={pageTitle}
+            whatsThisTitle={whatsThisTitle}
+            whatsThisBody={whatsThisBody}
+          />
+          <InsightsCounsellingSelector
+            selectedCounselling={selectedCounselling}
+            onOpenModal={onOpenCounsellingModal}
+          />
+          <InsightsToolbar
+            rankView={rankView}
+            onRankViewChange={view => {
+              setRankView(view);
+              setSortBy('default');
+              setSortDirection('asc');
+            }}
+            pageTitle={pageTitle}
+            showRankToggle={canToggleRanks}
+            sortBy={sortBy}
+            allowedFieldKeys={allowedFieldKeys}
+            onSortChange={option => {
+              setSortBy(option);
+              setSortDirection('asc');
+            }}
+            onOpenFiltersModal={() => setIsFiltersModalOpen(true)}
+            onOpenChoiceListModal={() => setIsChoiceListManagerOpen(true)}
+            choiceListModeLabel={activeChoiceListName}
+          />
+        </aside>
 
-      <InsightsCounsellingSelector
-        selectedCounselling={selectedCounselling}
-        onOpenModal={onOpenCounsellingModal}
-      />
+        <section className="rounded-2xl border border-customGray-10 bg-white p-4 shadow-sm">
+          <div className="mb-4 border-b border-customGray-10 pb-3">
+            <div className="flex flex-row items-center justify-between">
+              <h3 className="mt-1 text-base font-interMedium text-primary-blue">
+                {selectedCounselling?.name}
+              </h3>
+              <div className="flex items-center gap-2 text-xs">
+                <button
+                  type="button"
+                  onClick={() => setIsRecordsExpanded(prev => !prev)}
+                  className="hidden h-8 w-8 items-center justify-center rounded-lg border border-customGray-10 bg-white text-customGray-70 transition-colors hover:border-primary-blue/30 hover:text-primary-blue lg:inline-flex"
+                  aria-label={isRecordsExpanded ? 'Exit expanded view' : 'Expand table'}
+                  title={isRecordsExpanded ? 'Exit expanded view' : 'Expand table'}
+                >
+                  {isRecordsExpanded ? (
+                    <ArrowsPointingInIcon className="h-4 w-4" />
+                  ) : (
+                    <ArrowsPointingOutIcon className="h-4 w-4" />
+                  )}
+                </button>
 
-      <InsightsToolbar
-        rankView={rankView}
-        onRankViewChange={view => {
-          setRankView(view);
-          setSortBy('default');
-          setSortDirection('asc');
-        }}
-        pageTitle={pageTitle}
-        showRankToggle={canToggleRanks}
-        sortBy={sortBy}
-        allowedFieldKeys={allowedFieldKeys}
-        onSortChange={option => {
-          setSortBy(option);
-          setSortDirection('asc');
-        }}
-        onOpenFiltersModal={() => setIsFiltersModalOpen(true)}
-        onOpenChoiceListModal={() => setIsChoiceListManagerOpen(true)}
-        choiceListModeLabel={activeChoiceListName}
-      />
+              </div>
+            </div>
+            <p className="mt-1 text-xs font-inter text-customGray-60">
+              Click on the record for detailed information and factors.
+            </p>
+            <SpottedErrorModal
+              isOpen={isErrorModalOpen}
+              onClose={() => setIsErrorModalOpen(false)}
+            />
 
+          </div>
 
+          <InsightsRecordsTable
+            selectedCounselling={selectedCounselling}
+            records={filteredSortedRecords}
+            displayedFields={normalizedDisplayedFields}
+            allowedFieldKeys={allowedFieldKeys}
+            sessionYear={sessionYear}
+            sortBy={sortBy}
+            sortDirection={sortDirection}
+            onColumnHeaderClick={handleColumnHeaderClick}
+            rankView={rankView}
+            onCellClick={(record, fieldKey) => {
+              if (/^cr_\d{4}_\d+$/.test(String(fieldKey))) {
+                const mappedFieldKey =
+                  rankView === 'stateRank'
+                    ? (`crState_${String(fieldKey).replace(/^cr_/, '')}` as keyof IInsightRecord)
+                    : (fieldKey as keyof IInsightRecord);
+                const rawValue = record[mappedFieldKey];
 
-      <InsightsRecordsTable
-        selectedCounselling={selectedCounselling}
-        records={filteredSortedRecords}
-        displayedFields={normalizedDisplayedFields}
-        allowedFieldKeys={allowedFieldKeys}
-        sessionYear={sessionYear}
-        sortBy={sortBy}
-        sortDirection={sortDirection}
-        onColumnHeaderClick={handleColumnHeaderClick}
-        rankView={rankView}
-        onCellClick={(record, fieldKey) => {
-          if (/^cr_\d{4}_\d+$/.test(String(fieldKey))) {
-            const mappedFieldKey =
-              rankView === 'stateRank'
-                ? (`crState_${String(fieldKey).replace(/^cr_/, '')}` as keyof IInsightRecord)
-                : (fieldKey as keyof IInsightRecord);
-            const rawValue = record[mappedFieldKey];
+                // If the CR cell is effectively empty (shown as `—`), do nothing.
+                if (Array.isArray(rawValue)) {
+                  if (rawValue.length === 0) return;
+                  const last = rawValue[rawValue.length - 1];
+                  if (
+                    last === undefined ||
+                    last === null ||
+                    last === '' ||
+                    last === '—' ||
+                    last === '-'
+                  ) {
+                    return;
+                  }
+                } else if (
+                  rawValue === undefined ||
+                  rawValue === null ||
+                  rawValue === '' ||
+                  rawValue === '—' ||
+                  rawValue === '-'
+                ) {
+                  return;
+                }
 
-            // If the CR cell is effectively empty (shown as `—`), do nothing.
-            if (Array.isArray(rawValue)) {
-              if (rawValue.length === 0) return;
-              const last = rawValue[rawValue.length - 1];
-              if (
-                last === undefined ||
-                last === null ||
-                last === '' ||
-                last === '—' ||
-                last === '-'
-              ) {
+                setSelectedCrRecord(record);
+                setSelectedCrKey(String(mappedFieldKey));
+                setReturnToDetailsAfterCrClose(false);
+                setIsCrDetailsModalOpen(true);
+                setIsDetailsModalOpen(false);
+              } else {
+                setSelectedDetailsRecord(record);
+                setSelectedCrKey(null);
+                setReturnToDetailsAfterCrClose(false);
+                setIsDetailsModalOpen(true);
+                setIsCrDetailsModalOpen(false);
+              }
+            }}
+            isChoiceListSelected={recordId => selectedChoiceListMapByRecordId.get(recordId) ?? false}
+            getChoiceListCount={recordId => choiceListCountMapByRecordId.get(recordId) ?? 0}
+            showChoiceListCountBadge={!choiceListState.activeChoiceListId}
+            onChoiceListClick={record => {
+              const activeChoiceListId = choiceListState.activeChoiceListId;
+              if (activeChoiceListId) {
+                setChoiceListState(prevState =>
+                  toggleRecordInList(prevState, record.id, activeChoiceListId),
+                );
                 return;
               }
-            } else if (
-              rawValue === undefined ||
-              rawValue === null ||
-              rawValue === '' ||
-              rawValue === '—' ||
-              rawValue === '-'
-            ) {
-              return;
-            }
-
-            setSelectedCrRecord(record);
-            setSelectedCrKey(String(mappedFieldKey));
-            setReturnToDetailsAfterCrClose(false);
-            setIsCrDetailsModalOpen(true);
-            setIsDetailsModalOpen(false);
-          } else {
-            setSelectedDetailsRecord(record);
-            setSelectedCrKey(null);
-            setReturnToDetailsAfterCrClose(false);
-            setIsDetailsModalOpen(true);
-            setIsCrDetailsModalOpen(false);
-          }
-        }}
-        isChoiceListSelected={recordId => selectedChoiceListMapByRecordId.get(recordId) ?? false}
-        getChoiceListCount={recordId => choiceListCountMapByRecordId.get(recordId) ?? 0}
-        showChoiceListCountBadge={!choiceListState.activeChoiceListId}
-        onChoiceListClick={record => {
-          const activeChoiceListId = choiceListState.activeChoiceListId;
-          if (activeChoiceListId) {
-            setChoiceListState(prevState =>
-              toggleRecordInList(prevState, record.id, activeChoiceListId),
-            );
-            return;
-          }
-          setSelectedChoiceListRecord(record);
-          setIsChoiceListAssignmentOpen(true);
-        }}
-      />
-
-      <InsightsLockedSection />
+              setSelectedChoiceListRecord(record);
+              setIsChoiceListAssignmentOpen(true);
+            }}
+          />
+          <div className='mt-4 flex flex-row items-end justify-end'>
+            <button
+              type="button"
+              onClick={() => setIsErrorModalOpen(true)}
+              className="inline-flex text-xxs   items-end justify-end  gap-1.5 rounded-lg border border-customGray-10 bg-white px-3 py-1.5 text-customGray-70 transition-colors hover:border-primary-blue/30 hover:text-primary-blue"
+            >
+              Spotted an error? Let us know
+            </button>
+          </div>
+          <div className="mt-6">
+            <InsightsLockedSection />
+          </div>
+        </section>
+      </div>
 
       <FiltersModal
         isOpen={isFiltersModalOpen}
