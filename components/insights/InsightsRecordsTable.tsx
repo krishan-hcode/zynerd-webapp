@@ -190,8 +190,8 @@ export default function InsightsRecordsTable({
 
   if (records.length === 0) {
     return (
-      <div className="py-12 text-center text-customGray-50 font-inter text-sm">
-        No records found for this counselling.
+      <div className="py-12 text-center text-customGray-50 font-interMedium text-sm min-h-96 flex items-center justify-center">
+        <p className="text-center text-customGray-50 font-interMedium text-sm">No records found for this counselling.</p>
       </div>
     );
   }

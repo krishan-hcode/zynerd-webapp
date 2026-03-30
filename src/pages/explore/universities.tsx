@@ -2,7 +2,7 @@ import UniversitiesList from '@/universities/UniversitiesList';
 import UniversitiesSearch from '@/universities/UniversitiesSearch';
 import withAuth from '@/global/WithAuth';
 import Header from '@/qbank/QBankHeader';
-import {localExploreDataRepository} from '@/services/exploreData.repository';
+import { localExploreDataRepository } from '@/services/exploreData.repository';
 import {
   type IUniversitiesViewMode,
   type IUniversity,
@@ -12,7 +12,7 @@ import {
   getUniversityTypeOptions,
 } from '@/utils/universities';
 import Head from 'next/head';
-import {useEffect, useMemo, useState} from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 const GRID_CHUNK_SIZE = 24;
 const LIST_PAGE_SIZE = 20;

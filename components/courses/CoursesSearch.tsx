@@ -52,7 +52,6 @@ const CoursesSearch = ({
             }
             onClose={() => setOpenFilter(null)}
             onSelect={onClinicalTypeChange}
-            textSize="xs"
           />
           <ExploreFilterSelect
             label="Degree Types"
@@ -67,7 +66,6 @@ const CoursesSearch = ({
             }
             onClose={() => setOpenFilter(null)}
             onSelect={onDegreeTypeChange}
-            textSize="xs"
           />
           <ExploreFilterSelect
             label="Degree Terms"
@@ -82,7 +80,6 @@ const CoursesSearch = ({
             }
             onClose={() => setOpenFilter(null)}
             onSelect={onDegreeTermChange}
-            textSize="xs"
           />
         </div>
       }

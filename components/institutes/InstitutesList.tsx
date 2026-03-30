@@ -1,6 +1,8 @@
 import type { IInstitute, IInstitutesListProps } from '@/types/institutes.types';
+import ExploreDataTable, {
+  type ExploreDataTableColumn,
+} from '@/common/table/ExploreDataTable';
 import ExploreTablePagination from '@/common/table/ExploreTablePagination';
-import ExploreTableShell from '@/common/table/ExploreTableShell';
 import { classNames } from '@/utils/utils';
 import {
   BuildingOfficeIcon,
@@ -12,7 +14,7 @@ import {
   Squares2X2Icon,
 } from '@heroicons/react/24/outline';
 import InstituteCard from './InstituteCard';
-import { useEffect, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { useRouter } from 'next/router';
 
 const InstitutesList = ({
@@ -42,38 +44,78 @@ const InstitutesList = ({
     return () => observer.disconnect();
   }, [viewMode, hasMore, onLoadMore]);
 
-  const ListRow = ({ institute }: { institute: IInstitute }) => (
-    <button
-      type="button"
-      onClick={() => router.push(`/explore/institutes/${institute.slug}`)}
-      className="grid w-full grid-cols-12 gap-3 items-center px-4 py-3 border-b border-customGray-10 last:border-b-0 hover:bg-customGray-3/40 transition-colors text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary-blue/60">
-      <div className="col-span-12 md:col-span-3 min-w-0">
-        <p className="text-sm font-inter font-semibold text-primary-dark truncate">{institute.name}</p>
-        <p className="text-xs text-customGray-50 mt-0.5 truncate">{institute.university}</p>
-      </div>
-      <div className="col-span-6 md:col-span-3 flex items-center gap-1.5 text-customGray-60">
-        <MapPinIcon className="h-3.5 w-3.5 flex-shrink-0" />
-        <span className="text-xs font-inter truncate">
-          {institute.city}, {institute.state}
-        </span>
-      </div>
-      <div className="col-span-6 md:col-span-2 flex items-center gap-1.5 text-customGray-60">
-        <BuildingOffice2Icon className="h-3.5 w-3.5 flex-shrink-0" />
-        <span className="text-xs font-inter truncate">{institute.instituteType}</span>
-      </div>
-      <div className="col-span-6 md:col-span-2 flex items-center gap-1.5 text-customGray-60">
-        <ShieldCheckIcon className="h-3.5 w-3.5 flex-shrink-0" />
-        <span className="text-xs font-inter truncate">{institute.authority}</span>
-      </div>
-      <div className="col-span-6 md:col-span-1 flex items-center gap-1.5 text-customGray-60">
-        <BuildingOfficeIcon className="h-3.5 w-3.5 flex-shrink-0" />
-        <span className="text-xs font-inter truncate">{institute.beds}</span>
-      </div>
-      <div className="col-span-6 md:col-span-1 flex items-center gap-1.5 text-customGray-60">
-        <HomeModernIcon className="h-3.5 w-3.5 flex-shrink-0" />
-        <span className="text-xs font-inter truncate">{institute.localDistinction}</span>
-      </div>
-    </button>
+  const instituteColumns = useMemo<ExploreDataTableColumn<IInstitute>[]>(
+    () => [
+      {
+        id: 'institute',
+        header: 'Institute',
+        thClassName: 'min-w-[12rem] w-[15%]',
+        cell: row => (
+          <div className="min-w-0">
+            <p className="text-sm font-inter font-semibold text-primary-dark truncate">{row.name}</p>
+            <p className="text-xs text-customGray-50 mt-0.5 truncate">{row.university}</p>
+          </div>
+        ),
+      },
+      {
+        id: 'location',
+        header: 'Location',
+        thClassName: 'w-[10%]',
+        cell: row => (
+          <div className="flex items-center gap-1.5 text-customGray-60">
+            <MapPinIcon className="h-3.5 w-3.5 flex-shrink-0" />
+            <span className="text-xs font-inter truncate">
+              {row.city}, {row.state}
+            </span>
+          </div>
+        ),
+      },
+      {
+        id: 'type',
+        header: 'Type',
+        thClassName: 'w-[10%]',
+        cell: row => (
+          <div className="flex items-center gap-1.5 text-customGray-60">
+            <BuildingOffice2Icon className="h-3.5 w-3.5 flex-shrink-0" />
+            <span className="text-xs font-inter truncate">{row.instituteType}</span>
+          </div>
+        ),
+      },
+      {
+        id: 'authority',
+        header: 'Authority',
+        thClassName: 'w-[10%]',
+        cell: row => (
+          <div className="flex items-center gap-1.5 text-customGray-60">
+            <ShieldCheckIcon className="h-3.5 w-3.5 flex-shrink-0" />
+            <span className="text-xs font-inter truncate">{row.authority}</span>
+          </div>
+        ),
+      },
+      {
+        id: 'beds',
+        header: 'Beds',
+        thClassName: 'w-[7%]',
+        cell: row => (
+          <div className="flex items-center gap-1.5 text-customGray-60">
+            <BuildingOfficeIcon className="h-3.5 w-3.5 flex-shrink-0" />
+            <span className="text-xs font-inter truncate">{row.beds}</span>
+          </div>
+        ),
+      },
+      {
+        id: 'local',
+        header: 'Local',
+        thClassName: 'w-[7%]',
+        cell: row => (
+          <div className="flex items-center gap-1.5 text-customGray-60">
+            <HomeModernIcon className="h-3.5 w-3.5 flex-shrink-0" />
+            <span className="text-xs font-inter truncate">{row.localDistinction}</span>
+          </div>
+        ),
+      },
+    ],
+    [],
   );
 
   if (institutes.length === 0) {
@@ -134,31 +176,15 @@ const InstitutesList = ({
           </>
         ) : (
           <>
-            <ExploreTableShell minWidthClassName="min-w-[980px]">
-              <div className="grid grid-cols-12 gap-3 items-center px-4 py-2.5 bg-customGray-3/60 border-b border-customGray-10">
-                <p className="col-span-3 text-xxs font-interMedium uppercase tracking-[0.08em] text-primary-dark">
-                  Institute
-                </p>
-                <p className="col-span-3 text-xxs font-interMedium uppercase tracking-[0.08em] text-primary-dark">
-                  Location
-                </p>
-                <p className="col-span-2 text-xxs font-interMedium uppercase tracking-[0.08em] text-primary-dark">
-                  Type
-                </p>
-                <p className="col-span-2 text-xxs font-interMedium uppercase tracking-[0.08em] text-primary-dark">
-                  Authority
-                </p>
-                <p className="col-span-1 text-xxs font-interMedium uppercase tracking-[0.08em] text-primary-dark">
-                  Beds
-                </p>
-                <p className="col-span-1 text-xxs font-interMedium uppercase tracking-[0.08em] text-primary-dark">
-                  Local
-                </p>
-              </div>
-              {institutes.map(institute => (
-                <ListRow key={institute.id} institute={institute} />
-              ))}
-            </ExploreTableShell>
+            <ExploreDataTable<IInstitute>
+              data={institutes}
+              columns={instituteColumns}
+              getRowKey={row => String(row.id)}
+              minWidthClassName="min-w-[980px]"
+              tableClassName="table-fixed"
+              headerVariant="exploreMuted"
+              onRowClick={row => void router.push(`/explore/institutes/${row.slug}`)}
+            />
             <ExploreTablePagination
               currentPage={currentPage}
               totalPages={totalPages}

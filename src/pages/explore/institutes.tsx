@@ -2,10 +2,10 @@ import InstitutesList from '@/institutes/InstitutesList';
 import InstitutesSearch from '@/institutes/InstitutesSearch';
 import withAuth from '@/global/WithAuth';
 import Header from '@/qbank/QBankHeader';
-import {localExploreDataRepository} from '@/services/exploreData.repository';
+import { localExploreDataRepository } from '@/services/exploreData.repository';
 import type { IInstitute, IInstitutesViewMode } from '@/types/institutes.types';
 import Head from 'next/head';
-import {useEffect, useMemo, useState} from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 const GRID_CHUNK_SIZE = 24;
 const LIST_PAGE_SIZE = 20;

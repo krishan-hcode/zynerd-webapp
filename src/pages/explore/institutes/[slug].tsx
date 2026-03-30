@@ -1,6 +1,8 @@
 import withAuth from '@/global/WithAuth';
-import ExploreTableHeaderRow from '@/common/table/ExploreTableHeaderRow';
-import ExploreTableShell from '@/common/table/ExploreTableShell';
+import ExploreFilterSelect from '@/common/ExploreFilterSelect';
+import ExploreDataTable, {
+  type ExploreDataTableColumn,
+} from '@/common/table/ExploreDataTable';
 import Header from '@/qbank/QBankHeader';
 import { localExploreDataRepository } from '@/services/exploreData.repository';
 import type { IInstitute } from '@/types/institutes.types';
@@ -61,6 +63,9 @@ const InstituteDetailsPage = () => {
   const [feeCourseGroup, setFeeCourseGroup] = useState<
     'All' | 'Clinical' | 'Pre-Clinical' | 'Para-Clinical' | 'Non-Clinical'
   >('All');
+  const [closingRanksOpenFilter, setClosingRanksOpenFilter] = useState<
+    'year' | 'quota' | 'category' | null
+  >(null);
   const tabWrapperRef = useRef<HTMLDivElement | null>(null);
   const tabRailRef = useRef<HTMLDivElement | null>(null);
   const [isFixedTabs, setIsFixedTabs] = useState(false);
@@ -315,7 +320,7 @@ const InstituteDetailsPage = () => {
                       </div>
                     </div>
 
-                    <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-2">
+                    <div className="mt-3 grid grid-cols-2 xl:grid-cols-4 gap-2">
                       <div className="rounded-lg border border-customGray-10 bg-white px-3 py-2">
                         <p className="text-[11px] font-interMedium uppercase tracking-[0.06em] text-customGray-50">
                           Authority
@@ -446,81 +451,110 @@ const InstituteDetailsPage = () => {
                 className="scroll-mt-[150px] rounded-2xl bg-white overflow-hidden">
                 <div className=" sm:py-5">
                   <h2 className="text-lg sm:text-xl font-semibold font-besley text-primary-dark">Closing Ranks</h2>
-                  <div className="mt-3 flex flex-wrap gap-2">
-                    <select
-                      value={selectedSessionYear}
-                      onChange={event => setSelectedSessionYear(event.target.value)}
-                      className="rounded-lg border border-customGray-10 bg-customGray-3 px-3 py-1.5 text-xs font-inter text-primary-dark">
-                      <option value="2025">2025</option>
-                      <option value="2024">2024</option>
-                    </select>
-                    <select
-                      value={selectedQuota}
-                      onChange={event =>
-                        setSelectedQuota(event.target.value as 'All' | 'AIQ' | 'State Quota')
-                      }
-                      className="rounded-lg border border-customGray-10 bg-customGray-3 px-3 py-1.5 text-xs font-inter text-primary-dark">
-                      <option value="All">All Quotas</option>
-                      <option value="AIQ">AIQ</option>
-                      <option value="State Quota">State Quota</option>
-                    </select>
-                    <select
-                      value={selectedCategory}
-                      onChange={event =>
-                        setSelectedCategory(
-                          event.target.value as 'All' | 'GN' | 'EWS' | 'OBC' | 'SC' | 'ST',
+                  <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-3 sm:max-w-3xl">
+                    <ExploreFilterSelect
+                      label="Session year"
+                      selectedValue={selectedSessionYear}
+                      options={['2025', '2024']}
+                      allLabel="All years"
+                      isOpen={closingRanksOpenFilter === 'year'}
+                      onToggle={() =>
+                        setClosingRanksOpenFilter(current =>
+                          current === 'year' ? null : 'year',
                         )
                       }
-                      className="rounded-lg border border-customGray-10 bg-customGray-3 px-3 py-1.5 text-xs font-inter text-primary-dark">
-                      <option value="All">All Categories</option>
-                      <option value="GN">GN</option>
-                      <option value="EWS">EWS</option>
-                      <option value="OBC">OBC</option>
-                      <option value="SC">SC</option>
-                      <option value="ST">ST</option>
-                    </select>
+                      onClose={() => setClosingRanksOpenFilter(null)}
+                      onSelect={setSelectedSessionYear}
+                    />
+                    <ExploreFilterSelect
+                      label="Quota"
+                      selectedValue={selectedQuota === 'All' ? '' : selectedQuota}
+                      options={['AIQ', 'State Quota']}
+                      allLabel="All quotas"
+                      isOpen={closingRanksOpenFilter === 'quota'}
+                      onToggle={() =>
+                        setClosingRanksOpenFilter(current =>
+                          current === 'quota' ? null : 'quota',
+                        )
+                      }
+                      onClose={() => setClosingRanksOpenFilter(null)}
+                      onSelect={value =>
+                        setSelectedQuota((value || 'All') as 'All' | 'AIQ' | 'State Quota')
+                      }
+                    />
+                    <ExploreFilterSelect
+                      label="Category"
+                      selectedValue={selectedCategory === 'All' ? '' : selectedCategory}
+                      options={['GN', 'EWS', 'OBC', 'SC', 'ST']}
+                      allLabel="All categories"
+                      isOpen={closingRanksOpenFilter === 'category'}
+                      onToggle={() =>
+                        setClosingRanksOpenFilter(current =>
+                          current === 'category' ? null : 'category',
+                        )
+                      }
+                      onClose={() => setClosingRanksOpenFilter(null)}
+                      onSelect={value =>
+                        setSelectedCategory(
+                          (value || 'All') as 'All' | 'GN' | 'EWS' | 'OBC' | 'SC' | 'ST',
+                        )
+                      }
+                    />
                   </div>
                 </div>
-                <ExploreTableShell
+                <ExploreDataTable<IClosingRankRow>
+                  data={filteredClosingRanks}
+                  getRowKey={row => row.id}
                   minWidthClassName="min-w-[880px]"
+                  headerVariant="exploreMuted"
                   emptyState={
                     filteredClosingRanks.length === 0 ? (
                       <div className="px-4 py-6 text-center text-sm font-inter text-customGray-50">
                         No records match selected filters.
                       </div>
                     ) : undefined
-                  }>
-                  <table className="w-full">
-                    <thead>
-                      <ExploreTableHeaderRow
-                        tone="muted"
-                        headers={['Course', 'Quota', 'Category', 'Round 1', 'Round 2', 'Round 3']}
-                      />
-                    </thead>
-                    <tbody>
-                      {filteredClosingRanks.map(row => (
-                        <tr key={row.id} className="border-t border-customGray-10">
-                          <td className="px-4 py-3 text-sm font-inter text-primary-dark">{row.course}</td>
-                          <td className="px-4 py-3">
-                            <span className="inline-flex rounded-md bg-customGray-5 px-2 py-1 text-xs font-inter text-customGray-70">
-                              {row.quota}
-                            </span>
-                          </td>
-                          <td className="px-4 py-3 text-xs font-inter text-customGray-70">{row.category}</td>
-                          <td className="px-4 py-3 text-sm font-inter text-primary-dark">
-                            {row.round1.toLocaleString('en-IN')}
-                          </td>
-                          <td className="px-4 py-3 text-sm font-inter text-primary-dark">
-                            {row.round2.toLocaleString('en-IN')}
-                          </td>
-                          <td className="px-4 py-3 text-sm font-inter text-primary-dark">
-                            {row.round3.toLocaleString('en-IN')}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </ExploreTableShell>
+                  }
+                  columns={
+                    [
+                      {
+                        id: 'course',
+                        header: 'Course',
+                        cell: row => row.course,
+                      },
+                      {
+                        id: 'quota',
+                        header: 'Quota',
+                        cell: row => (
+                          <span className="inline-flex rounded-md bg-customGray-5 px-2 py-1 text-xs font-inter text-customGray-70">
+                            {row.quota}
+                          </span>
+                        ),
+                      },
+                      {
+                        id: 'category',
+                        header: 'Category',
+                        cell: row => (
+                          <span className="text-xs font-inter text-customGray-70">{row.category}</span>
+                        ),
+                      },
+                      {
+                        id: 'r1',
+                        header: 'Round 1',
+                        cell: row => row.round1.toLocaleString('en-IN'),
+                      },
+                      {
+                        id: 'r2',
+                        header: 'Round 2',
+                        cell: row => row.round2.toLocaleString('en-IN'),
+                      },
+                      {
+                        id: 'r3',
+                        header: 'Round 3',
+                        cell: row => row.round3.toLocaleString('en-IN'),
+                      },
+                    ] satisfies ExploreDataTableColumn<IClosingRankRow>[]
+                  }
+                />
               </section>
 
               <section
@@ -555,50 +589,45 @@ const InstituteDetailsPage = () => {
                     />
                   </div>
                 </div>
-                <ExploreTableShell
+                <ExploreDataTable<IFeeRow>
+                  data={filteredFeeRows}
+                  getRowKey={row => row.id}
                   minWidthClassName="min-w-[980px]"
+                  headerVariant="exploreMuted"
                   emptyState={
                     filteredFeeRows.length === 0 ? (
                       <div className="px-4 py-6 text-center text-sm font-inter text-customGray-50">
                         No fee rows match your search or filters.
                       </div>
                     ) : undefined
-                  }>
-                  <table className="w-full">
-                    <thead>
-                      <ExploreTableHeaderRow
-                        headers={[
-                          'Course',
-                          'Annual Tuition',
-                          'Hostel',
-                          'Monthly Stipend',
-                          'Bond Years',
-                          'Bond Penalty',
-                        ]}
-                      />
-                    </thead>
-                    <tbody>
-                      {filteredFeeRows.map(row => (
-                        <tr key={row.id} className="border-t border-customGray-10">
-                          <td className="px-4 py-3 text-sm font-inter text-primary-dark">{row.course}</td>
-                          <td className="px-4 py-3 text-sm font-inter text-primary-dark">
-                            {formatCurrency(row.annualTuition)}
-                          </td>
-                          <td className="px-4 py-3 text-sm font-inter text-primary-dark">
-                            {formatCurrency(row.hostel)}
-                          </td>
-                          <td className="px-4 py-3 text-sm font-inter text-primary-dark">
-                            {formatCurrency(row.stipend)}
-                          </td>
-                          <td className="px-4 py-3 text-sm font-inter text-primary-dark">{row.bondYears}</td>
-                          <td className="px-4 py-3 text-sm font-inter text-primary-dark">
-                            {formatCurrency(row.bondPenalty)}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </ExploreTableShell>
+                  }
+                  columns={
+                    [
+                      { id: 'course', header: 'Course', cell: row => row.course },
+                      {
+                        id: 'tuition',
+                        header: 'Annual Tuition',
+                        cell: row => formatCurrency(row.annualTuition),
+                      },
+                      {
+                        id: 'hostel',
+                        header: 'Hostel',
+                        cell: row => formatCurrency(row.hostel),
+                      },
+                      {
+                        id: 'stipend',
+                        header: 'Monthly Stipend',
+                        cell: row => formatCurrency(row.stipend),
+                      },
+                      { id: 'bondYears', header: 'Bond Years', cell: row => row.bondYears },
+                      {
+                        id: 'bondPenalty',
+                        header: 'Bond Penalty',
+                        cell: row => formatCurrency(row.bondPenalty),
+                      },
+                    ] satisfies ExploreDataTableColumn<IFeeRow>[]
+                  }
+                />
               </section>
             </>
           )}
