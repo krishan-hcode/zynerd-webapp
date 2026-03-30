@@ -1,4 +1,7 @@
 import Modal from '@/common/Modal';
+import ExploreDataTable, {
+  type ExploreDataTableColumn,
+} from '@/common/table/ExploreDataTable';
 import type { IInsightRecord } from '@/types/insights.types';
 import { usePremiumStatus } from '@/hooks/usePremiumStatus';
 import { getDynamicCrLabel } from '@/insights/insightsFilter.types';
@@ -36,6 +39,52 @@ export default function InsightsCrDetailsModal({
   const { isPremiumPurchased } = usePremiumStatus();
   const visibleValues = isPremiumPurchased ? crValues : crValues.slice(0, 3);
 
+  type ICrDetailRow = { rowKey: string; rankValue: number | string };
+  const crTableRows: ICrDetailRow[] = visibleValues.map((v, idx) => ({
+    rowKey: `${String(clickedCrKey)}-${idx}`,
+    rankValue: v,
+  }));
+
+  const crColumns: ExploreDataTableColumn<ICrDetailRow>[] = [
+    {
+      id: 'round',
+      header: 'ROUND',
+      thClassName: 'rounded-tl-md',
+      cell: () => record.round,
+    },
+    {
+      id: 'state',
+      header: 'STATE',
+      cell: () => record.state,
+    },
+    {
+      id: 'institute',
+      header: 'INSTITUTE',
+      cell: () => record.institute,
+    },
+    {
+      id: 'course',
+      header: 'COURSE',
+      cell: () => record.course,
+    },
+    {
+      id: 'quota',
+      header: 'QUOTA',
+      cell: () => record.quota,
+    },
+    {
+      id: 'category',
+      header: 'CATEGORY',
+      cell: () => record.category,
+    },
+    {
+      id: 'rank',
+      header: isStateCrKey ? 'STATE RANK' : 'AI RANK',
+      thClassName: 'rounded-tr-lg',
+      cell: row => String(row.rankValue),
+    },
+  ];
+
   return (
     <Modal
       isOpen={isOpen}
@@ -54,80 +103,20 @@ export default function InsightsCrDetailsModal({
         </div>
 
         <div className="rounded-xl border border-customGray-10 bg-white overflow-hidden">
-          <div className="border-b border-customGray-10 bg-customGray-3/40 px-4 py-3">
-            <div className="flex flex-wrap items-center justify-between gap-2">
-              <p className="text-[11px] font-interMedium uppercase tracking-[0.08em] text-customGray-60">
-                {crLabel || 'Selected Rank'}
-              </p>
-              <p className="text-xs font-inter text-customGray-60">
-                1 - {Math.min(visibleValues.length, totalRecords)} of {totalRecords} Records
-              </p>
-            </div>
-          </div>
 
-          <div className="px-4 py-4">
+
+          <div className="">
             {visibleValues.length === 0 ? (
               <div className="text-xs text-customGray-60 font-inter">—</div>
             ) : (
-              <div className="overflow-x-auto">
-                <table className="w-full min-w-[900px] text-left font-inter text-sm rounded-lg">
-                  <thead className="sticky top-0 bg-gradient-to-r from-primary-blue/90 to-primary-blue/95 rounded-t-lg ">
-                    <tr>
-                      <th className="px-3 py-2 font-semibold text-white text-xs whitespace-nowrap rounded-tl-md">
-                        ROUND
-                      </th>
-                      <th className="px-3 py-2 font-semibold text-white text-xs whitespace-nowrap">
-                        STATE
-                      </th>
-                      <th className="px-3 py-2 font-semibold text-white text-xs whitespace-nowrap">
-                        INSTITUTE
-                      </th>
-                      <th className="px-3 py-2 font-semibold text-white  text-xs whitespace-nowrap">
-                        COURSE
-                      </th>
-                      <th className="px-3 py-2 font-semibold text-white text-xs whitespace-nowrap">
-                        QUOTA
-                      </th>
-                      <th className="px-3 py-2 font-semibold text-white text-xs whitespace-nowrap">
-                        CATEGORY
-                      </th>
-                      <th className="px-3 py-2 font-semibold text-white text-xs whitespace-nowrap rounded-tr-lg">
-                        {isStateCrKey ? 'STATE RANK' : 'AI RANK'}
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {visibleValues.map((v, idx) => (
-                      <tr
-                        key={`${String(clickedCrKey)}-${idx}`}
-                        className="border-b border-customGray-10 hover:bg-customGray-5 transition-colors"
-                      >
-                        <td className="px-3 py-2 text-primary-dark whitespace-nowrap text-xs">
-                          {record.round}
-                        </td>
-                        <td className="px-3 py-2 text-primary-dark whitespace-nowrap text-xs">
-                          {record.state}
-                        </td>
-                        <td className="px-3 py-2 text-primary-dark whitespace-nowrap text-xs">
-                          {record.institute}
-                        </td>
-                        <td className="px-3 py-2 text-primary-dark whitespace-nowrap text-xs">
-                          {record.course}
-                        </td>
-                        <td className="px-3 py-2 text-primary-dark whitespace-nowrap text-xs">
-                          {record.quota}
-                        </td>
-                        <td className="px-3 py-2 text-primary-dark whitespace-nowrap text-xs">
-                          {record.category}
-                        </td>
-                        <td className="px-3 py-2 text-primary-dark whitespace-nowrap text-xs">
-                          {String(v)}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+              <ExploreDataTable<ICrDetailRow>
+                useShell={false}
+                headerVariant="insights"
+                data={crTableRows}
+                getRowKey={row => row.rowKey}
+                tableClassName="min-w-[900px] font-inter text-sm rounded-lg"
+                columns={crColumns}
+              />
             )}
           </div>
 

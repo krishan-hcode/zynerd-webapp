@@ -97,7 +97,7 @@ export const encrypt = (data: string) => {
   }
 };
 
-export const classNames = (...classes: string[]) => {
+export const classNames = (...classes: (string | undefined | false | null)[]) => {
   return classes.filter(Boolean).join(' ');
 };
 
